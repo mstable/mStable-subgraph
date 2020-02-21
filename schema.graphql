@@ -1,0 +1,177 @@
+""" An ERC20-compatible token """
+type Token @entity {
+  id: ID!
+
+  """ Token address """
+  address: Bytes!
+
+  """ Token decimals """
+  decimals: Int!
+
+  """ Token name """
+  name: String!
+
+  """ Token symbol """
+  symbol: String!
+
+  """ Total supply of the token """
+  totalSupply: BigDecimal!
+
+  """ Quantity of the token that has been minted """
+  totalMinted: BigDecimal!
+
+  """ Quantity of the token that has been transferred """
+  totalTransferred: BigDecimal!
+
+  """ Quantity of the token that has been burned """
+  totalBurned: BigDecimal!
+}
+
+""" Basket Asset (e.g. DAI for the mUSD basket)  """
+type Basset @entity {
+  id: ID!
+
+  """ Basket the Basset is contained in """
+  basket: Basket! @derivedFrom(field: "bassets")
+
+  """ Maximum weight of the basset in its Basket """
+  maxWeight: BigInt!
+
+  """ Basset to Masset ratio for quantity conversion """
+  ratio: BigInt!
+
+  """ Status of the Basset, e.g. 'Normal' """
+  status: String!
+
+  """ The underlying Token for the Basset """
+  token: Token!
+
+  """ The vault balance of the Basset in its Basket """
+  vaultBalance: BigInt!
+}
+
+""" A Basket of Bassets (e.g. for mUSD) """
+type Basket @entity {
+  id: ID!
+
+  """ The Bassets in the Basket """
+  bassets: [Basset!]!
+
+  """ The collateralisation ratio of the Basket """
+  collateralisationRatio: BigInt!
+
+  """ Expired Bassets in the Basket """
+  expiredBassets: [Bytes!]!
+
+  """ Flag for whether the Basket has failed """
+  failed: Boolean!
+
+  """ Masset the Basket belongs to """
+  masset: Masset! @derivedFrom(field: "basket")
+}
+
+""" A reward for minting in a given Tranche """
+type TrancheReward @entity {
+  id: ID!
+
+  """ The quantity of MTA allocated to the rewardee """
+  allocation: BigInt!
+
+  """ Flag for whether the reward was claimed """
+  claimed: Boolean!
+
+  """ The volume minted by the rewardee """
+  mintVolume: BigInt!
+
+  """ Flag for whether the reward was redeemed """
+  redeemed: Boolean!
+
+  """ The address of the rewardee """
+  rewardee: Bytes!
+
+  """ The Tranche the reward is for """
+  tranche: Tranche! @derivedFrom(field: "rewards")
+}
+
+""" A Tranche for minting rewards for a given Masset """
+type Tranche @entity {
+  id: ID!
+
+  """ The time at which the claiming period ends """
+  claimEndTime: BigInt!
+
+  """ The time at which the Tranche ends """
+  endTime: BigInt!
+
+  """ The Masset the Tranche is for """
+  masset: Masset! @derivedFrom(field: "tranches")
+
+  """ Addresses of the rewardees in this Tranche """
+  rewardees: [Bytes!]!
+
+  """ The TrancheRewards in this Tranche """
+  rewards: [TrancheReward!]!
+
+  """ The time at which the Tranche starts """
+  startTime: BigInt!
+
+  """ The total volume of the Masset minted in this Tranche """
+  totalMintVolume: BigInt!
+
+  """ The total reward units (of MTA) for this Tranche """
+  totalRewardUnits: BigInt!
+
+  """ The sequential number of this Tranche """
+  trancheNumber: BigInt!
+
+  """ The total unclaimed reward units (of MTA) for this Tranche """
+  unclaimedRewardUnits: BigInt!
+
+  """ The time at which rewards in this Tranche are unlocked """
+  unlockTime: BigInt!
+}
+
+""" An mStable asset (e.g. mUSD) """
+type Masset @entity {
+  id: ID!
+
+  """ The Basket of Bassets for this Masset """
+  basket: Basket!
+
+  """ The redemption fee """
+  redemptionFee: BigInt!
+
+  """ The address of the fee pool """
+  feePool: Bytes!
+
+  """ The underlying Token for this Masset """
+  token: Token!
+
+  """ The Tranches containing rewards for this Masset """
+  tranches: [Tranche!]!
+}
+
+""" An Ethereum account with balances """
+type Account @entity {
+  id: ID!
+
+  """ Address of the account """
+  address: Bytes!
+
+  """ AccountBalances of the account """
+  balances: [AccountBalance!]! @derivedFrom(field: "account")
+}
+
+""" An account balance for a given token """
+type AccountBalance @entity {
+  id: ID!
+
+  """ Account """
+  account: Account!
+
+  """ Amount as a decimal value """
+  amount: BigDecimal!
+
+  """ Token """
+  token: Token!
+}

@@ -1,0 +1,40 @@
+{
+  "name": "mstable-graph",
+  "version": "0.1.0",
+  "scripts": {
+    "provision": "sh ./scripts/provision.sh",
+    "truffle:migrate": "cd lib/mStable-contracts && yarn migrate",
+    "truffle:script": "cd lib/mStable-contracts && yarn script",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "create-local": "graph create jameslefrere/mStable --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy jameslefrere/mStable --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+  },
+  "doNotRunMe": {
+    "create": "graph create jameslefrere/mStable --node https://api.thegraph.com/deploy/",
+    "deploy": "graph deploy jameslefrere/mStable --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.17.1",
+    "@graphprotocol/graph-ts": "^0.17.0",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "typescript": "^3.8.2",
+    "prettier": "^1.19.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,json}": [
+      "prettier --write --config ./.prettierrc",
+      "git add"
+    ]
+  }
+}
