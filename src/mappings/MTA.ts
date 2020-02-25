@@ -1,13 +1,17 @@
-import { MinterAdded, MinterRemoved, Transfer } from '../../generated/MTA/Systok'
+import { Transfer, Approval, ClaimedTokens, NewCloneToken } from '../../generated/MTA/Systok'
 import { Transfer as ERC20Transfer } from '../../generated/MTA/ERC20Detailed'
 import { handleTokenTransfer } from './Token'
 
-export function handleMinterAdded(event: MinterAdded): void {
-  // TODO later: Recol
+export function handleApproval(event: Approval): void {
+  // TODO later
 }
 
-export function handleMinterRemoved(event: MinterRemoved): void {
-  // TODO later: Recol
+export function handleClaimedTokens(event: ClaimedTokens): void {
+  // TODO later
+}
+
+export function handleNewCloneToken(event: NewCloneToken): void {
+  // TODO later
 }
 
 export function handleTransfer(event: Transfer): void {

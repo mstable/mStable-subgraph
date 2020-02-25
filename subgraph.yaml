@@ -9,7 +9,7 @@ dataSources:
     name: Manager
     network: development
     source:
-      address: '0x55f90861A72fCfa5165f6A08519AE3e457Ab1844'
+      address: '0x5C65932418C286bb65866a01fc3359D81E0Ab39b'
       abi: Manager
     mapping:
       kind: ethereum/events
@@ -35,7 +35,7 @@ dataSources:
     name: MTA
     network: development
     source:
-      address: '0x214f78a74eeae7486121eCA37f0ae14E0676d300'
+      address: '0x5F8EAc476170b00E530da59ddF13Ac967816124b'
       abi: Systok
     mapping:
       kind: ethereum/events
@@ -50,10 +50,12 @@ dataSources:
         - name: ERC20Detailed
           file: ./lib/mStable-contracts/build/ERC20Detailed.json
       eventHandlers:
-        - event: MinterAdded(indexed address)
-          handler: handleMinterAdded
-        - event: MinterRemoved(indexed address)
-          handler: handleMinterRemoved
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: ClaimedTokens(indexed address,indexed address,uint256)
+          handler: handleClaimedTokens
+        - event: NewCloneToken(indexed address,uint256)
+          handler: handleNewCloneToken
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
   # The ForgeRewardsMUSD contract is deployed independently
@@ -81,10 +83,10 @@ dataSources:
         - name: ForgeRewardsMUSD
           file: ./lib/mStable-contracts/build/ForgeRewardsMUSD.json
       eventHandlers:
-        - event: RewardeeMintVolumeIncreased(indexed uint256,indexed address,uint256)
-          handler: handleRewardeeMintVolumeIncreased
-        - event: MintVolumeIncreased(indexed uint256,uint256)
-          handler: handleMintVolumeIncreased
+        - event: RewardeePointsIncreased(indexed uint256,indexed address,uint256)
+          handler: handleRewardeePointsIncreased
+        - event: TotalPointsIncreased(indexed uint256,uint256)
+          handler: handleTotalPointsIncreased
         - event: RewardClaimed(indexed address,uint256,uint256)
           handler: handleRewardClaimed
         - event: RewardRedeemed(indexed address,uint256,uint256)

@@ -1,20 +1,20 @@
 import {
-  RewardeeMintVolumeIncreased,
-  MintVolumeIncreased,
   RewardClaimed,
+  RewardeePointsIncreased,
   RewardRedeemed,
+  TotalPointsIncreased,
   TrancheFunded,
   UnclaimedRewardWithdrawn,
 } from '../../generated/ForgeRewardsMUSD/ForgeRewardsMUSD'
 import { updateTranche } from '../models/Tranche'
 
-export function handleRewardeeMintVolumeIncreased(
-  event: RewardeeMintVolumeIncreased,
+export function handleRewardeePointsIncreased(
+  event: RewardeePointsIncreased,
 ): void {
   updateTranche(event.address, event.params.trancheNumber)
 }
 
-export function handleMintVolumeIncreased(event: MintVolumeIncreased): void {
+export function handleTotalPointsIncreased(event: TotalPointsIncreased): void {
   updateTranche(event.address, event.params.trancheNumber)
 }
 
