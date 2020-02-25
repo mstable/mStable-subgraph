@@ -50,10 +50,12 @@ dataSources:
         - name: ERC20Detailed
           file: ./lib/mStable-contracts/build/ERC20Detailed.json
       eventHandlers:
-        - event: MinterAdded(indexed address)
-          handler: handleMinterAdded
-        - event: MinterRemoved(indexed address)
-          handler: handleMinterRemoved
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: ClaimedTokens(indexed address,indexed address,uint256)
+          handler: handleClaimedTokens
+        - event: NewCloneToken(indexed address,uint256)
+          handler: handleNewCloneToken
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
   # The ForgeRewardsMUSD contract is deployed independently
