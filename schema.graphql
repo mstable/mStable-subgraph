@@ -43,6 +43,8 @@ type Basset @entity {
   """ Status of the Basset, e.g. 'Normal' """
   status: String!
 
+  isTransferFeeCharged: Boolean!
+
   """ The underlying Token for the Basset """
   token: Token!
 

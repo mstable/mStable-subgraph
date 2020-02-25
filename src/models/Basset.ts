@@ -14,9 +14,10 @@ export function updateBassets(massetAddress: Address): Basset[] {
 
     let token = getOrCreateToken(unparsedBassets.value0[i])
     bassets[i].token = token.id
-    bassets[i].ratio = unparsedBassets.value2[i]
-    bassets[i].maxWeight = unparsedBassets.value3[i]
-    bassets[i].vaultBalance = unparsedBassets.value4[i]
+    bassets[i].ratio = unparsedBassets.value1[i]
+    bassets[i].maxWeight = unparsedBassets.value2[i]
+    bassets[i].vaultBalance = unparsedBassets.value3[i]
+    bassets[i].isTransferFeeCharged = unparsedBassets.value4[i]
     bassets[i].status = mapBassetStatus(unparsedBassets.value5[i])
     bassets[i].save()
   }
