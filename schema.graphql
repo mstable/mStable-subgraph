@@ -149,6 +149,9 @@ type Masset @entity {
   """ The underlying Token for this Masset """
   token: Token!
 
+  """ The token symbol """
+  tokenSymbol: String!
+
   """ The Tranches containing rewards for this Masset """
   tranches: [Tranche!]!
 }
