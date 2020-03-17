@@ -58,43 +58,6 @@ dataSources:
           handler: handleNewCloneToken
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-  # The ForgeRewardsMUSD contract is deployed independently
-  - kind: ethereum/contract
-    name: ForgeRewardsMUSD
-    network: development
-    source:
-      address: '0x9A0395Cf203dE6cC51d083d9c76A9Cc1C3e907f0'
-      abi: ForgeRewardsMUSD
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/mappings/ForgeRewardsMUSD.ts
-      entities:
-        - Account
-        - AccountBalance
-        - Basket
-        - Basset
-        - Masset
-        - Token
-        - Tranche
-        - TrancheReward
-      abis:
-        - name: ForgeRewardsMUSD
-          file: ./lib/mStable-contracts/build/ForgeRewardsMUSD.json
-      eventHandlers:
-        - event: RewardeePointsIncreased(indexed uint256,indexed address,uint256)
-          handler: handleRewardeePointsIncreased
-        - event: TotalPointsIncreased(indexed uint256,uint256)
-          handler: handleTotalPointsIncreased
-        - event: RewardClaimed(indexed address,uint256,uint256)
-          handler: handleRewardClaimed
-        - event: RewardRedeemed(indexed address,uint256,uint256)
-          handler: handleRewardRedeemed
-        - event: TrancheFunded(indexed uint256,uint256)
-          handler: handleTrancheFunded
-        - event: UnclaimedRewardWithdrawn(indexed uint256,uint256)
-          handler: handleUnclaimedRewardWithdrawn
 
 templates:
   - kind: ethereum/contract
@@ -113,8 +76,6 @@ templates:
         - Basket
         - Basset
         - Token
-        - Tranche
-        - TrancheReward
       abis:
         - name: Masset
           file: ./lib/mStable-contracts/build/Masset.json
