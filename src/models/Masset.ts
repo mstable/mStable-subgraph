@@ -24,7 +24,6 @@ export function upsertMasset(address: Address): Masset {
   masset.token = token.id
   masset.tokenSymbol = token.symbol
   masset.basket = basket.id
-  masset.tranches = []
   masset.save()
 
   return masset
