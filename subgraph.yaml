@@ -5,31 +5,6 @@ schema:
   file: ./schema.graphql
 
 dataSources:
-  - kind: ethereum/contract
-    name: Manager
-    network: development
-    source:
-      address: '0x5C65932418C286bb65866a01fc3359D81E0Ab39b'
-      abi: Manager
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/mappings/Manager.ts
-      entities:
-        - Masset
-      abis:
-        - name: Manager
-          file: ./lib/mStable-contracts/build/Manager.json
-        - name: Masset
-          file: ./lib/mStable-contracts/build/Masset.json
-        - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/ERC20Detailed.json
-      eventHandlers:
-        - event: MassetAdded(indexed bytes32,address)
-          handler: handleMassetAdded
-        - event: MassetEjected(indexed bytes32,address)
-          handler: handleMassetEjected
   # The MTA contract is deployed independently
   - kind: ethereum/contract
     name: MTA
