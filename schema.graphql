@@ -163,7 +163,7 @@ type SavingsContract @entity {
   exchangeRates: [ExchangeRate!]! @derivedFrom(field: "savingsContract")
 
   # The same for all SavingsContracts; from SavingsManager
-  savingsRate: BigInt!
+  savingsRate: BigDecimal!
 
   creditBalances: [CreditBalance!]! @derivedFrom(field: "savingsContract")
 

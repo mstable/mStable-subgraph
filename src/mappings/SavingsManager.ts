@@ -1,4 +1,3 @@
-import { BigInt } from '@graphprotocol/graph-ts'
 import {
   SavingsContractEnabled,
   SavingsRateChanged,
@@ -6,10 +5,12 @@ import {
   InterestDistributed,
   InterestWithdrawnByGovernor,
 } from '../../generated/SavingsManager/SavingsManager'
-import { SavingsContract as SavingsContractEntity } from '../../generated/schema'
 import { SavingsContract } from '../../generated/templates'
 import { getOrCreateMasset } from '../models/Masset'
-import { toDecimal } from '../utils/number'
+import {
+  getOrCreateSavingsContract,
+  updateSavingsContractSavingsRate,
+} from '../models/SavingsContract'
 
 export function handleSavingsContractEnabled(event: SavingsContractEnabled): void {
   let massetAddress = event.params.mAsset
@@ -18,24 +19,21 @@ export function handleSavingsContractEnabled(event: SavingsContractEnabled): voi
   // Start tracking savings contract events
   SavingsContract.create(savingsContractAddress)
 
-  // Create the savings contract entity
-  let savingsContractEntity = new SavingsContractEntity(
-    savingsContractAddress.toHexString(),
-  )
-  savingsContractEntity.masset = massetAddress.toHexString()
-  savingsContractEntity.totalCredits = toDecimal(BigInt.fromI32(0), 18)
-  savingsContractEntity.totalSavings = toDecimal(BigInt.fromI32(0), 18)
-  savingsContractEntity.savingsRate = BigInt.fromI32(0) // default FIXME
-  savingsContractEntity.automationEnabled = false // default FIXME
-  savingsContractEntity.save()
+  // Create the savings contract entity and set the masset
+  let savingsContract = getOrCreateSavingsContract(savingsContractAddress)
+  savingsContract.masset = massetAddress.toHexString()
+  savingsContract.save()
 
+  // Create the masset if it doesn't exist already
   let masset = getOrCreateMasset(massetAddress)
   masset.save()
 }
 
 export function handleSavingsRateChanged(event: SavingsRateChanged): void {
-  let savingsContract = SavingsContractEntity.load(event.address.toHexString())
-  savingsContract.savingsRate = event.params.newSavingsRate
+  let savingsContract = updateSavingsContractSavingsRate(
+    event.address,
+    event.params.newSavingsRate,
+  )
   savingsContract.save()
 }
 

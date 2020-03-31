@@ -4,27 +4,30 @@ import {
   SavingsDeposited,
   CreditsRedeemed,
 } from '../../generated/templates/SavingsContract/SavingsContract'
-import {
-  ExchangeRate,
-  SavingsContract,
-  SavingsContract as SavingsContractEntity,
-} from '../../generated/schema'
 import { getEventId } from '../utils/strings'
 import { decreaseCreditBalance, increaseCreditBalance } from '../models/CreditBalance'
 import { getOrCreateAccount } from '../models/Account'
+import { getOrCreateExchangeRate } from '../models/ExchangeRate'
+import {
+  getOrCreateSavingsContract,
+  increaseSavingsContractTotalCredits,
+  increaseSavingsContractTotalSavings,
+  decreaseSavingsContractTotalCredits,
+  decreaseSavingsContractTotalSavings,
+} from '../models/SavingsContract'
 import { toDecimal } from '../utils/number'
 
 export function handleAutomaticInterestCollectionSwitched(
   event: AutomaticInterestCollectionSwitched,
 ): void {
-  let savingsContractEntity = SavingsContractEntity.load(event.address.toHexString())
-  savingsContractEntity.automationEnabled = event.params.automationEnabled
-  savingsContractEntity.save()
+  let savingsContract = getOrCreateSavingsContract(event.address)
+  savingsContract.automationEnabled = event.params.automationEnabled
+  savingsContract.save()
 }
 
 export function handleExchangeRateUpdated(event: ExchangeRateUpdated): void {
   let eventId = getEventId(event)
-  let exchangeRate = new ExchangeRate(eventId) // fixme use model
+  let exchangeRate = getOrCreateExchangeRate(eventId)
   exchangeRate.savingsContract = event.address.toHexString()
   exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, 16)
   exchangeRate.timestamp = event.block.timestamp.toI32()
@@ -33,42 +36,48 @@ export function handleExchangeRateUpdated(event: ExchangeRateUpdated): void {
 
 export function handleSavingsDeposited(event: SavingsDeposited): void {
   let account = getOrCreateAccount(event.params.saver)
-  let savingsContractEntity = SavingsContract.load(
-    event.address.toHexString(),
-  ) as SavingsContract // fixme use model
+  let savingsContract = getOrCreateSavingsContract(event.address)
+
   let creditBalance = increaseCreditBalance(
     account,
-    savingsContractEntity,
+    savingsContract,
     event.params.creditsIssued,
   )
   creditBalance.save()
 
-  savingsContractEntity.totalCredits = savingsContractEntity.totalCredits.plus(
-    toDecimal(event.params.creditsIssued, 18),
+  savingsContract = increaseSavingsContractTotalCredits(
+    event.address,
+    event.params.creditsIssued,
   )
-  savingsContractEntity.totalSavings = savingsContractEntity.totalSavings.plus(
-    toDecimal(event.params.savingsDeposited, 18),
+
+  savingsContract = increaseSavingsContractTotalSavings(
+    event.address,
+    event.params.savingsDeposited,
   )
-  savingsContractEntity.save()
+
+  savingsContract.save()
 }
 
 export function handleCreditsRedeemed(event: CreditsRedeemed): void {
   let account = getOrCreateAccount(event.params.redeemer)
-  let savingsContractEntity = SavingsContract.load(
-    event.address.toHexString(),
-  ) as SavingsContract // fixme use model
+  let savingsContract = getOrCreateSavingsContract(event.address)
+
   let creditBalance = decreaseCreditBalance(
     account,
-    savingsContractEntity,
+    savingsContract,
     event.params.creditsRedeemed,
   )
   creditBalance.save()
 
-  savingsContractEntity.totalCredits = savingsContractEntity.totalCredits.minus(
-    toDecimal(event.params.creditsRedeemed, 18),
+  savingsContract = decreaseSavingsContractTotalCredits(
+    event.address,
+    event.params.creditsRedeemed,
   )
-  savingsContractEntity.totalSavings = savingsContractEntity.totalSavings.minus(
-    toDecimal(event.params.savingsCredited, 18),
+
+  savingsContract = decreaseSavingsContractTotalSavings(
+    event.address,
+    event.params.savingsCredited,
   )
-  savingsContractEntity.save()
+
+  savingsContract.save()
 }
