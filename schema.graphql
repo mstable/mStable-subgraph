@@ -1,3 +1,15 @@
+# TODO use enum
+#enum BassetStatus {
+#  Default,
+#  Normal,
+#  BrokenBelowPeg,
+#  BrokenAbovePeg,
+#  Blacklisted,
+#  Liquidating,
+#  Liquidated,
+#  Failed
+#}
+
 """ An ERC20-compatible token """
 type Token @entity {
   id: ID!
@@ -34,22 +46,24 @@ type Basset @entity {
   """ Basket the Basset is contained in """
   basket: Basket! @derivedFrom(field: "bassets")
 
-  """ Maximum weight of the basset in its Basket """
-  maxWeight: BigInt!
+  """ Target weight of the Basset """
+  targetWeight: BigInt!
 
   """ Basset to Masset ratio for quantity conversion """
   ratio: BigInt!
 
+  # TODO use enum
   """ Status of the Basset, e.g. 'Normal' """
   status: String!
 
+  """ An ERC20 can charge transfer fee, e.g. USDT or DGX tokens """
   isTransferFeeCharged: Boolean!
 
   """ The underlying Token for the Basset """
   token: Token!
 
-  """ The vault balance of the Basset in its Basket """
-  vaultBalance: BigInt!
+  """ Amount of the Basset that is held in collateral """
+  vaultBalance: BigDecimal!
 }
 
 """ A Basket of Bassets (e.g. for mUSD) """
@@ -62,8 +76,8 @@ type Basket @entity {
   """ The collateralisation ratio of the Basket """
   collateralisationRatio: BigInt!
 
-  """ Expired Bassets in the Basket """
-  expiredBassets: [Bytes!]!
+  """ Max number of Bassets that can be present in the Basket """
+  maxBassets: Int!
 
   """ Flag for whether the Basket has failed """
   failed: Boolean!
@@ -76,11 +90,12 @@ type Basket @entity {
 type Masset @entity {
   id: ID!
 
+  # TODO explain that this is the BasketManager
   """ The Basket of Bassets for this Masset """
   basket: Basket!
 
-  """ The redemption fee """
-  redemptionFee: BigInt!
+  """ The redemption fee rate """
+  feeRate: BigInt!
 
   """ The address of the fee pool """
   feePool: Bytes!
@@ -90,9 +105,11 @@ type Masset @entity {
 
   """ The token symbol """
   tokenSymbol: String!
+
+  savingsContracts: [SavingsContract!]! @derivedFrom(field: "masset")
 }
 
-""" An Ethereum account with balances """
+""" An Ethereum account with balances/credit balances """
 type Account @entity {
   id: ID!
 
@@ -101,6 +118,9 @@ type Account @entity {
 
   """ AccountBalances of the account """
   balances: [AccountBalance!]! @derivedFrom(field: "account")
+
+  """ CreditBalances of the account """
+  creditBalances: [CreditBalance!]! @derivedFrom(field: "account")
 }
 
 """ An account balance for a given token """
@@ -115,4 +135,47 @@ type AccountBalance @entity {
 
   """ Token """
   token: Token!
+}
+
+""" A credit balance for a given savings contract """
+type CreditBalance @entity {
+  id: ID!
+
+  """ Account """
+  account: Account!
+
+  """ Amount as a decimal value """
+  amount: BigDecimal!
+
+  """ Savings contract """
+  savingsContract: SavingsContract!
+}
+
+type SavingsContract @entity {
+  id: ID!
+
+  masset: Masset!
+
+  totalSavings: BigDecimal!
+
+  totalCredits: BigDecimal!
+
+  exchangeRates: [ExchangeRate!]! @derivedFrom(field: "savingsContract")
+
+  # The same for all SavingsContracts; from SavingsManager
+  savingsRate: BigInt!
+
+  creditBalances: [CreditBalance!]! @derivedFrom(field: "savingsContract")
+
+  automationEnabled: Boolean!
+}
+
+type ExchangeRate @entity {
+  id: ID!
+
+  exchangeRate: BigDecimal!
+
+  timestamp: Int!
+
+  savingsContract: SavingsContract!
 }
