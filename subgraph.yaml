@@ -5,46 +5,18 @@ schema:
   file: ./schema.graphql
 
 dataSources:
-  # The MTA contract is deployed independently
   - kind: ethereum/contract
-    name: MTA
+    # TODO later: this can be a template (Masset) created via Manager events.
+    name: MUSD
     network: development
     source:
-      address: '0x5F8EAc476170b00E530da59ddF13Ac967816124b'
-      abi: Systok
+      abi: MUSD
+      address: '0xBb4625644ADcd020957e4231D56ffa7A501099A3'
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: ./src/mappings/MTA.ts
-      entities:
-        - Token
-      abis:
-        - name: Systok
-          file: ./lib/mStable-contracts/build/Systok.json
-        - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/ERC20Detailed.json
-      eventHandlers:
-        - event: Approval(indexed address,indexed address,uint256)
-          handler: handleApproval
-        - event: ClaimedTokens(indexed address,indexed address,uint256)
-          handler: handleClaimedTokens
-        - event: NewCloneToken(indexed address,uint256)
-          handler: handleNewCloneToken
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-
-templates:
-  - kind: ethereum/contract
-    name: Masset
-    network: development
-    source:
-      abi: Masset
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/mappings/Masset.ts
+      file: ./src/mappings/MUSD.ts
       entities:
         - Account
         - AccountBalance
@@ -52,32 +24,118 @@ templates:
         - Basset
         - Token
       abis:
+        - name: MUSD
+          file: ./lib/mStable-contracts/build/contracts/MUSD.json
         - name: Masset
-          file: ./lib/mStable-contracts/build/Masset.json
+          file: ./lib/mStable-contracts/build/contracts/Masset.json
         - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/ERC20Detailed.json
+          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+        - name: BasketManager
+          file: ./lib/mStable-contracts/build/contracts/BasketManager.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,uint256)
-          handler: handleApproval
-        - event: BassetAdded(indexed address)
+        - event: Minted(indexed address,uint256,address,uint256)
+          handler: handleMinted
+        - event: MintedMulti(indexed address,uint256,uint256,uint256[])
+          handler: handleMintedMulti
+        - event: Redeemed(indexed address,address,uint256,address,uint256)
+          handler: handleRedeemed
+        - event: RedeemedMulti(indexed address,address,uint256,uint256,uint256[])
+          handler: handleRedeemedMulti
+        - event: PaidFee(address,uint256,uint256)
+          handler: handlePaidFee
+        - event: RedemptionFeeChanged(uint256)
+          handler: handleRedemptionFeeChanged
+        - event: FeeRecipientChanged(address)
+          handler: handleFeeRecipientChanged
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  - kind: ethereum/contract
+    name: SavingsManager
+    network: development
+    source:
+      abi: SavingsManager
+      address: '0x2997fb5bC1b5E76e19B1C225A3D9619C381355c2'
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/SavingsManager.ts
+      entities:
+        - Account
+        - AccountBalance
+        - Token
+        - ExchangeRate
+        - Masset
+      abis:
+       - name: SavingsManager
+         file: ./lib/mStable-contracts/build/contracts/SavingsManager.json
+       - name: Masset
+         file: ./lib/mStable-contracts/build/contracts/Masset.json
+       - name: ERC20Detailed
+         file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+       - name: BasketManager
+         file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+      eventHandlers:
+      - event: SavingsContractEnabled(indexed address,address)
+        handler: handleSavingsContractEnabled
+      - event: SavingsRateChanged(uint256)
+        handler: handleSavingsRateChanged
+      - event: InterestCollected(indexed address,uint256,uint256,uint256)
+        handler: handleInterestCollected
+      - event: InterestDistributed(indexed address,uint256)
+        handler: handleInterestDistributed
+      - event: InterestWithdrawnByGovernor(indexed address,address,uint256)
+        handler: handleInterestWithdrawnByGovernor
+
+templates:
+  - kind: ethereum/contract
+    name: BasketManager
+    network: development
+    source:
+      abi: BasketManager
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/BasketManager.ts
+      entities:
+        - BasketManager
+        - Basket
+        - Basset
+        - Token
+      abis:
+        - name: BasketManager
+          file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+      eventHandlers:
+        - event: BassetAdded(indexed address,address)
           handler: handleBassetAdded
         - event: BassetRemoved(indexed address)
           handler: handleBassetRemoved
         - event: BasketWeightsUpdated(indexed address[],uint256[])
           handler: handleBasketWeightsUpdated
-        - event: FeeRecipientChanged(address)
-          handler: handleFeeRecipientChanged
-        - event: Minted(indexed address,uint256,uint256)
-          handler: handleMinted
-        - event: Minted(indexed address,uint256,uint256[])
-          handler: handleMintedSingle
-        - event: PaidFee(address,uint256,uint256)
-          handler: handlePaidFee
-        - event: Redeemed(indexed address,address,uint256,uint256[])
-          handler: handleRedeemed
-        - event: RedeemedSingle(indexed address,address,uint256,uint256,uint256)
-          handler: handleRedeemedSingle
-        - event: RedemptionFeeChanged(uint256)
-          handler: handleRedemptionFeeChanged
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+
+  - kind: ethereum/contract
+    name: SavingsContract
+    network: development
+    source:
+      abi: SavingsContract
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/SavingsContract.ts
+      entities:
+        - Token
+      abis:
+        - name: SavingsContract
+          file: ./lib/mStable-contracts/build/contracts/SavingsContract.json
+      eventHandlers:
+        - event: AutomaticInterestCollectionSwitched(bool)
+          handler: handleAutomaticInterestCollectionSwitched
+        - event: ExchangeRateUpdated(uint256,uint256)
+          handler: handleExchangeRateUpdated
+        - event: SavingsDeposited(indexed address,uint256,uint256)
+          handler: handleSavingsDeposited
+        - event: CreditsRedeemed(indexed address,uint256,uint256)
+          handler: handleCreditsRedeemed

@@ -1,8 +1,9 @@
-import { Address, Bytes, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, EthereumTuple } from '@graphprotocol/graph-ts'
 import { Basket, Basset, Token } from '../../generated/schema'
-import { Masset as MassetContract } from '../../generated/templates/Masset/Masset'
 import { updateBassets } from './Basset'
 import { getOrCreateToken } from './Token'
+import { BasketManager } from '../../generated/templates/BasketManager/BasketManager'
+import { Masset as MassetContract } from '../../generated/MUSD/Masset'
 
 export function getOrCreateBasket(massetAddress: Address): Basket {
   let basket = Basket.load(massetAddress.toHexString())
@@ -15,15 +16,17 @@ export function getOrCreateBasket(massetAddress: Address): Basket {
 
 export function upsertBasket(massetAddress: Address): Basket {
   let basket = new Basket(massetAddress.toHexString())
+
   let bassets = updateBassets(massetAddress)
-  let contract = MassetContract.bind(massetAddress)
-  let unparsedBasket = contract.getBasket()
 
-  basket.bassets = bassets.map<string>((basset: Basset) => basset.id) as string[]
-  basket.expiredBassets = unparsedBasket.value0 as Bytes[]
-  basket.failed = unparsedBasket.value1
-  basket.collateralisationRatio = unparsedBasket.value2
+  let massetContract = MassetContract.bind(massetAddress)
+  let basketManagerContract = BasketManager.bind(massetContract.getBasketManager())
+  let basketData = basketManagerContract.getBasket()
 
+  basket.bassets = bassets.map<string>((basset: Basset) => basset.id)
+  basket.failed = basketData.failed
+  basket.maxBassets = basketData.maxBassets
+  basket.collateralisationRatio = basketData.collateralisationRatio
   basket.save()
 
   return basket

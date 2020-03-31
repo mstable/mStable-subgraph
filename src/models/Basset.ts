@@ -1,30 +1,39 @@
 import { Address } from '@graphprotocol/graph-ts'
-import { Masset as MassetContract } from '../../generated/templates/Masset/Masset'
+import { Masset as MassetContract } from '../../generated/MUSD/Masset'
+import { BasketManager } from '../../generated/templates/BasketManager/BasketManager'
 import { Basset } from '../../generated/schema'
 import { getOrCreateToken } from './Token'
+import { toDecimal } from '../utils/number'
 
 export function updateBassets(massetAddress: Address): Basset[] {
-  let contract = MassetContract.bind(massetAddress)
-  let unparsedBassets = contract.getBassets()
+  let massetContract = MassetContract.bind(massetAddress)
+  let basketManagerContract = BasketManager.bind(massetContract.getBasketManager())
+  let unparsedBassets = basketManagerContract.getBassets()
 
   let bassets = new Array<Basset>()
+  let length = unparsedBassets.value2.toI32()
 
-  for (let i = 0; i < unparsedBassets.value0.length; i++) {
-    bassets.push(new Basset(unparsedBassets.value0[i].toHex()))
+  for (let i = 0; i < length; i++) {
+    let value0 = unparsedBassets.value0
+    let basset = value0[i]
 
-    let token = getOrCreateToken(unparsedBassets.value0[i])
+    bassets.push(new Basset(basset.addr.toHexString()))
+
+    let token = getOrCreateToken(basset.addr)
+
     bassets[i].token = token.id
-    bassets[i].ratio = unparsedBassets.value1[i]
-    bassets[i].maxWeight = unparsedBassets.value2[i]
-    bassets[i].vaultBalance = unparsedBassets.value3[i]
-    bassets[i].isTransferFeeCharged = unparsedBassets.value4[i]
-    bassets[i].status = mapBassetStatus(unparsedBassets.value5[i])
+    bassets[i].ratio = basset.ratio
+    bassets[i].targetWeight = basset.targetWeight
+    bassets[i].vaultBalance = toDecimal(basset.vaultBalance, token.decimals)
+    bassets[i].isTransferFeeCharged = basset.isTransferFeeCharged
+    bassets[i].status = mapBassetStatus(basset.status)
     bassets[i].save()
   }
 
   return bassets
 }
 
+// @ts-ignore
 function mapBassetStatus(status: u32): string {
   switch (status) {
     case 0:
