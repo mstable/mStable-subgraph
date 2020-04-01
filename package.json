@@ -15,7 +15,7 @@
     "deploy": "graph deploy jameslefrere/mStable --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "git@github.com:JamesLefrere/graph-cli.git#fix-tuple-arrays-for-0.17.1",
+    "@graphprotocol/graph-cli": "https://github.com/JamesLefrere/graph-cli.git#fix-tuple-arrays-for-0.17.1",
     "@graphprotocol/graph-ts": "^0.17.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
