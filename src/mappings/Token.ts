@@ -11,8 +11,8 @@ import { ZERO_ADDRESS } from '../utils/token'
 export function handleTokenTransfer(event: Transfer): void {
   let token = getOrCreateToken(event.address)
 
-  let isMint = event.params.from.toString() === ZERO_ADDRESS
-  let isBurn = event.params.to.toString() === ZERO_ADDRESS
+  let isMint = event.params.from.toHexString() == ZERO_ADDRESS
+  let isBurn = event.params.to.toHexString() == ZERO_ADDRESS
   let isTransfer = !isMint && !isBurn
 
   if (isMint) {
