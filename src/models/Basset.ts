@@ -37,18 +37,20 @@ export function updateBassets(massetAddress: Address): Basset[] {
 function mapBassetStatus(status: u32): string {
   switch (status) {
     case 0:
-      return 'Normal'
+      return 'Default'
     case 1:
-      return 'BrokenBelowPeg'
+      return 'Normal'
     case 2:
-      return 'BrokenAbovePeg'
-    case 3:
       return 'BrokenBelowPeg'
+    case 3:
+      return 'BrokenAbovePeg'
     case 4:
-      return 'Liquidating'
+      return 'Blacklisted'
     case 5:
-      return 'Liquidated'
+      return 'Liquidating'
     case 6:
+      return 'Liquidated'
+    case 7:
       return 'Failed'
     default:
       throw new Error(`Unknown basset status ${status}`)
