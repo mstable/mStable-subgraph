@@ -8,10 +8,10 @@ dataSources:
   - kind: ethereum/contract
     # TODO later: this can be a template (Masset) created via Manager events.
     name: MUSD
-    network: 'ropsten'
+    network: '{{network}}'
     source:
       abi: MUSD
-      address: '0xA0bc6084Ab8BfEAe1a9b3b11af9b7c6f3bE32c05'
+      address: '{{address_mUSD}}'
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -52,10 +52,10 @@ dataSources:
 
   - kind: ethereum/contract
     name: SavingsManager
-    network: 'ropsten'
+    network: '{{network}}'
     source:
       abi: SavingsManager
-      address: '0x0ea3765E1Bf9E7b89eFf798860427e7E4504E341'
+      address: '{{address_SavingsManager}}'
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -91,7 +91,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: BasketManager
-    network: 'ropsten'
+    network: '{{network}}'
     source:
       abi: BasketManager
     mapping:
@@ -117,7 +117,7 @@ templates:
 
   - kind: ethereum/contract
     name: SavingsContract
-    network: 'ropsten'
+    network: '{{network}}'
     source:
       abi: SavingsContract
     mapping:

@@ -6,14 +6,13 @@ A subgraph for [mStable contracts](https://github.com/mstable/mStable-contracts)
 
 ## Setup
 
-
 ### Prerequisites
 
 First, ensure these are installed:
 
-* [Ganache](https://www.trufflesuite.com/ganache)
-* [Truffle](https://www.trufflesuite.com/truffle)
-* [Docker](https://docs.docker.com/install)
+- [Ganache](https://www.trufflesuite.com/ganache)
+- [Truffle](https://www.trufflesuite.com/truffle)
+- [Docker](https://docs.docker.com/install)
 
 Next, ensure the Docker daemon is running.
 
@@ -49,9 +48,13 @@ this re-create the `generated` folder.
 
 **NB:** Type-checking is performed at build time; `yarn tsc` won't work.
 
-
 ---
 
 ## Deployment
 
-Coming soon: don't deploy until it's ready, please :-)
+1. `yarn`
+2. `yarn provision` (ensure correct branch or commit sha on mStable-contracts)
+3. `yarn codegen`
+4. Ensure correct config in `/config/<network>.json`
+5. `yarn prepare:<network>`
+6. `yarn run deploy <access token>`
