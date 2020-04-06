@@ -112,6 +112,8 @@ templates:
           handler: handleBassetAdded
         - event: BassetRemoved(indexed address)
           handler: handleBassetRemoved
+        - event: GraceUpdated(uint256)
+          handler: handleGraceChanged
         - event: BasketWeightsUpdated(indexed address[],uint256[])
           handler: handleBasketWeightsUpdated
 

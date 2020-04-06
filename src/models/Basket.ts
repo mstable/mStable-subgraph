@@ -26,6 +26,7 @@ export function upsertBasket(massetAddress: Address): Basket {
   basket.bassets = bassets.map<string>((basset: Basset) => basset.id)
   basket.failed = basketData.failed
   basket.maxBassets = basketData.maxBassets
+  basket.grace = basketManagerContract.grace()
   basket.collateralisationRatio = basketData.collateralisationRatio
   basket.save()
 
