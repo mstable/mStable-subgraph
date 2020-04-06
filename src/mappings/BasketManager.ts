@@ -2,6 +2,7 @@ import { EthereumEvent } from '@graphprotocol/graph-ts'
 import {
   BasketManager,
   BasketWeightsUpdated,
+  GraceUpdated,
   BassetAdded,
   BassetRemoved,
 } from '../../generated/templates/BasketManager/BasketManager'
@@ -20,6 +21,10 @@ export function handleBassetAdded(event: BassetAdded): void {
 }
 
 export function handleBassetRemoved(event: BassetRemoved): void {
+  updateBasketForBasketManagerEvent(event)
+}
+
+export function handleGraceChanged(event: GraceUpdated): void {
   updateBasketForBasketManagerEvent(event)
 }
 

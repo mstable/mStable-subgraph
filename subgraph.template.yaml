@@ -8,10 +8,10 @@ dataSources:
   - kind: ethereum/contract
     # TODO later: this can be a template (Masset) created via Manager events.
     name: MUSD
-    network: development
+    network: '{{network}}'
     source:
       abi: MUSD
-      address: '0xBb4625644ADcd020957e4231D56ffa7A501099A3'
+      address: '{{address_mUSD}}'
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -52,10 +52,10 @@ dataSources:
 
   - kind: ethereum/contract
     name: SavingsManager
-    network: development
+    network: '{{network}}'
     source:
       abi: SavingsManager
-      address: '0x2997fb5bC1b5E76e19B1C225A3D9619C381355c2'
+      address: '{{address_SavingsManager}}'
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -68,30 +68,30 @@ dataSources:
         - ExchangeRate
         - Masset
       abis:
-       - name: SavingsManager
-         file: ./lib/mStable-contracts/build/contracts/SavingsManager.json
-       - name: Masset
-         file: ./lib/mStable-contracts/build/contracts/Masset.json
-       - name: ERC20Detailed
-         file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
-       - name: BasketManager
-         file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+        - name: SavingsManager
+          file: ./lib/mStable-contracts/build/contracts/SavingsManager.json
+        - name: Masset
+          file: ./lib/mStable-contracts/build/contracts/Masset.json
+        - name: ERC20Detailed
+          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+        - name: BasketManager
+          file: ./lib/mStable-contracts/build/contracts/BasketManager.json
       eventHandlers:
-      - event: SavingsContractEnabled(indexed address,address)
-        handler: handleSavingsContractEnabled
-      - event: SavingsRateChanged(uint256)
-        handler: handleSavingsRateChanged
-      - event: InterestCollected(indexed address,uint256,uint256,uint256)
-        handler: handleInterestCollected
-      - event: InterestDistributed(indexed address,uint256)
-        handler: handleInterestDistributed
-      - event: InterestWithdrawnByGovernor(indexed address,address,uint256)
-        handler: handleInterestWithdrawnByGovernor
+        - event: SavingsContractEnabled(indexed address,address)
+          handler: handleSavingsContractEnabled
+        - event: SavingsRateChanged(uint256)
+          handler: handleSavingsRateChanged
+        - event: InterestCollected(indexed address,uint256,uint256,uint256)
+          handler: handleInterestCollected
+        - event: InterestDistributed(indexed address,uint256)
+          handler: handleInterestDistributed
+        - event: InterestWithdrawnByGovernor(indexed address,address,uint256)
+          handler: handleInterestWithdrawnByGovernor
 
 templates:
   - kind: ethereum/contract
     name: BasketManager
-    network: development
+    network: '{{network}}'
     source:
       abi: BasketManager
     mapping:
@@ -112,12 +112,14 @@ templates:
           handler: handleBassetAdded
         - event: BassetRemoved(indexed address)
           handler: handleBassetRemoved
+        - event: GraceUpdated(uint256)
+          handler: handleGraceChanged
         - event: BasketWeightsUpdated(indexed address[],uint256[])
           handler: handleBasketWeightsUpdated
 
   - kind: ethereum/contract
     name: SavingsContract
-    network: development
+    network: '{{network}}'
     source:
       abi: SavingsContract
     mapping:

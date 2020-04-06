@@ -7,8 +7,12 @@
     "truffle:script": "cd lib/mStable-contracts && yarn script",
     "codegen": "yarn graph codegen",
     "build": "yarn graph build",
-    "create-local": "yarn graph create jameslefrere/mStable --node http://127.0.0.1:8020",
-    "deploy-local": "yarn graph deploy jameslefrere/mStable --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "prepare:local": "mustache config/development.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
+    "create": "yarn graph create mStable/mStable-protocol --debug --node https://api.thegraph.com/deploy/",
+    "create-local": "yarn graph create mStable/mStable-protocol --node http://127.0.0.1:8020",
+    "deploy": "yarn graph deploy mStable/mStable-protocol --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
+    "deploy-local": "yarn graph deploy mStable/mStable-protocol --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "doNotRunMe": {
     "create": "graph create jameslefrere/mStable --node https://api.thegraph.com/deploy/",
@@ -21,6 +25,7 @@
     "eslint-config-prettier": "^6.10.0",
     "husky": "^4.2.1",
     "lint-staged": "^10.0.7",
+    "mustache": "^4.0.1",
     "prettier": "^1.19.1"
   },
   "husky": {
