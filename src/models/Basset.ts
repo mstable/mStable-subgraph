@@ -11,7 +11,7 @@ export function updateBassets(massetAddress: Address): Basset[] {
   let unparsedBassets = basketManagerContract.getBassets()
 
   let bassets = new Array<Basset>()
-  let length = unparsedBassets.value2.toI32()
+  let length = unparsedBassets.value1.toI32()
 
   for (let i = 0; i < length; i++) {
     let value0 = unparsedBassets.value0

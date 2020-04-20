@@ -35,11 +35,11 @@ dataSources:
       eventHandlers:
         - event: Minted(indexed address,uint256,address,uint256)
           handler: handleMinted
-        - event: MintedMulti(indexed address,uint256,uint256,uint256[])
+        - event: MintedMulti(indexed address,uint256,address[],uint256[])
           handler: handleMintedMulti
         - event: Redeemed(indexed address,address,uint256,address,uint256)
           handler: handleRedeemed
-        - event: RedeemedMulti(indexed address,address,uint256,uint256,uint256[])
+        - event: RedeemedMulti(indexed address,address,uint256,address[],uint256[])
           handler: handleRedeemedMulti
         - event: PaidFee(address,uint256,uint256)
           handler: handlePaidFee
@@ -77,8 +77,8 @@ dataSources:
         - name: BasketManager
           file: ./lib/mStable-contracts/build/contracts/BasketManager.json
       eventHandlers:
-        - event: SavingsContractEnabled(indexed address,address)
-          handler: handleSavingsContractEnabled
+        - event: SavingsContractAdded(indexed address,address)
+          handler: handleSavingsContractAdded
         - event: SavingsRateChanged(uint256)
           handler: handleSavingsRateChanged
         - event: InterestCollected(indexed address,uint256,uint256,uint256)
@@ -114,7 +114,7 @@ templates:
           handler: handleBassetRemoved
         - event: GraceUpdated(uint256)
           handler: handleGraceChanged
-        - event: BasketWeightsUpdated(indexed address[],uint256[])
+        - event: BasketWeightsUpdated(address[],uint256[])
           handler: handleBasketWeightsUpdated
 
   - kind: ethereum/contract

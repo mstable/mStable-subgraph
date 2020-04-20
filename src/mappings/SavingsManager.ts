@@ -1,5 +1,5 @@
 import {
-  SavingsContractEnabled,
+  SavingsContractAdded,
   SavingsRateChanged,
   InterestCollected,
   InterestDistributed,
@@ -12,7 +12,7 @@ import {
   updateSavingsContractSavingsRate,
 } from '../models/SavingsContract'
 
-export function handleSavingsContractEnabled(event: SavingsContractEnabled): void {
+export function handleSavingsContractAdded(event: SavingsContractAdded): void {
   let massetAddress = event.params.mAsset
   let savingsContractAddress = event.params.savingsContract
 
@@ -30,11 +30,7 @@ export function handleSavingsContractEnabled(event: SavingsContractEnabled): voi
 }
 
 export function handleSavingsRateChanged(event: SavingsRateChanged): void {
-  let savingsContract = updateSavingsContractSavingsRate(
-    event.address,
-    event.params.newSavingsRate,
-  )
-  savingsContract.save()
+  updateSavingsContractSavingsRate(event.address, event.params.newSavingsRate)
 }
 
 export function handleInterestCollected(event: InterestCollected): void {
