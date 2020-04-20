@@ -1,5 +1,6 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { SavingsContract } from '../../generated/schema'
+import { SavingsContract as SavingsContractTemplate } from '../../generated/templates/SavingsContract/SavingsContract'
 import { toDecimal, ZERO } from '../utils/number'
 
 const DECIMALS = 18
@@ -22,65 +23,59 @@ export function getOrCreateSavingsContract(address: Address): SavingsContract {
   return savingsContract as SavingsContract
 }
 
-export function increaseSavingsContractTotalSavings(
-  address: Address,
-  amount: BigInt,
-): SavingsContract {
-  let savingsContract = getOrCreateSavingsContract(address)
-
-  savingsContract.totalSavings = savingsContract.totalSavings.plus(
-    toDecimal(amount, DECIMALS),
-  )
-
-  return savingsContract
-}
-
 export function increaseSavingsContractTotalCredits(
   address: Address,
   amount: BigInt,
-): SavingsContract {
+): void {
   let savingsContract = getOrCreateSavingsContract(address)
 
   savingsContract.totalCredits = savingsContract.totalCredits.plus(
     toDecimal(amount, DECIMALS),
   )
 
-  return savingsContract
+  savingsContract.save()
 }
 
 export function decreaseSavingsContractTotalSavings(
   address: Address,
   amount: BigInt,
-): SavingsContract {
+): void {
   let savingsContract = getOrCreateSavingsContract(address)
 
   savingsContract.totalSavings = savingsContract.totalSavings.minus(
     toDecimal(amount, DECIMALS),
   )
 
-  return savingsContract
+  savingsContract.save()
 }
 
 export function decreaseSavingsContractTotalCredits(
   address: Address,
   amount: BigInt,
-): SavingsContract {
+): void {
   let savingsContract = getOrCreateSavingsContract(address)
 
   savingsContract.totalCredits = savingsContract.totalCredits.minus(
     toDecimal(amount, DECIMALS),
   )
 
-  return savingsContract
+  savingsContract.save()
 }
 
-export function updateSavingsContractSavingsRate(
-  address: Address,
-  amount: BigInt,
-): SavingsContract {
+export function updateSavingsContractSavingsRate(address: Address, amount: BigInt): void {
   let savingsContract = getOrCreateSavingsContract(address)
 
   savingsContract.savingsRate = toDecimal(amount, SAVINGS_RATE_DECIMALS)
 
-  return savingsContract
+  savingsContract.save()
+}
+
+export function updateSavingsContractTotalSavings(address: Address): void {
+  let savingsContract = getOrCreateSavingsContract(address)
+  let instance = SavingsContractTemplate.bind(address)
+  let totalSavings = instance.totalSavings()
+
+  savingsContract.totalSavings = toDecimal(totalSavings, DECIMALS)
+
+  savingsContract.save()
 }

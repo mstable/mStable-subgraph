@@ -11,7 +11,7 @@ import { getOrCreateExchangeRate } from '../models/ExchangeRate'
 import {
   getOrCreateSavingsContract,
   increaseSavingsContractTotalCredits,
-  increaseSavingsContractTotalSavings,
+  updateSavingsContractTotalSavings,
   decreaseSavingsContractTotalCredits,
   decreaseSavingsContractTotalSavings,
 } from '../models/SavingsContract'
@@ -32,6 +32,8 @@ export function handleExchangeRateUpdated(event: ExchangeRateUpdated): void {
   exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, 16)
   exchangeRate.timestamp = event.block.timestamp.toI32()
   exchangeRate.save()
+
+  updateSavingsContractTotalSavings(event.address)
 }
 
 export function handleSavingsDeposited(event: SavingsDeposited): void {
@@ -45,17 +47,9 @@ export function handleSavingsDeposited(event: SavingsDeposited): void {
   )
   creditBalance.save()
 
-  savingsContract = increaseSavingsContractTotalCredits(
-    event.address,
-    event.params.creditsIssued,
-  )
+  increaseSavingsContractTotalCredits(event.address, event.params.creditsIssued)
 
-  savingsContract = increaseSavingsContractTotalSavings(
-    event.address,
-    event.params.savingsDeposited,
-  )
-
-  savingsContract.save()
+  updateSavingsContractTotalSavings(event.address)
 }
 
 export function handleCreditsRedeemed(event: CreditsRedeemed): void {
@@ -69,15 +63,7 @@ export function handleCreditsRedeemed(event: CreditsRedeemed): void {
   )
   creditBalance.save()
 
-  savingsContract = decreaseSavingsContractTotalCredits(
-    event.address,
-    event.params.creditsRedeemed,
-  )
+  decreaseSavingsContractTotalCredits(event.address, event.params.creditsRedeemed)
 
-  savingsContract = decreaseSavingsContractTotalSavings(
-    event.address,
-    event.params.savingsCredited,
-  )
-
-  savingsContract.save()
+  decreaseSavingsContractTotalSavings(event.address, event.params.savingsCredited)
 }
