@@ -16,6 +16,7 @@ import {
   decreaseSavingsContractTotalSavings,
 } from '../models/SavingsContract'
 import { toDecimal } from '../utils/number'
+import { DEFAULT_DECIMALS } from '../utils/token'
 
 export function handleAutomaticInterestCollectionSwitched(
   event: AutomaticInterestCollectionSwitched,
@@ -29,7 +30,7 @@ export function handleExchangeRateUpdated(event: ExchangeRateUpdated): void {
   let eventId = getEventId(event)
   let exchangeRate = getOrCreateExchangeRate(eventId)
   exchangeRate.savingsContract = event.address.toHexString()
-  exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, 16)
+  exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, DEFAULT_DECIMALS)
   exchangeRate.timestamp = event.block.timestamp.toI32()
   exchangeRate.save()
 
