@@ -10,8 +10,7 @@ export function upsertMasset(address: Address): Masset {
   let token = getOrCreateToken(address)
   let basket = getOrCreateBasket(address)
 
-  masset.feeRate = contract.redemptionFee()
-  masset.feePool = contract.feeRecipient()
+  masset.feeRate = contract.swapFee()
   masset.token = token.id
   masset.tokenSymbol = token.symbol
   masset.basket = basket.id
@@ -29,13 +28,7 @@ export function getOrCreateMasset(address: Address): Masset {
   return upsertMasset(address)
 }
 
-export function updateMassetFeePool(address: Address, feePool: Address): void {
-  let masset = getOrCreateMasset(address)
-  masset.feePool = feePool
-  masset.save()
-}
-
-export function updateMassetRedemptionFee(address: Address, feeRate: BigInt): void {
+export function updateMassetSwapFee(address: Address, feeRate: BigInt): void {
   let masset = getOrCreateMasset(address)
   masset.feeRate = feeRate
   masset.save()

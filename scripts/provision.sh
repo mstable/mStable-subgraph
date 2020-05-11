@@ -7,5 +7,5 @@ echo "Installing contracts package"
 cd ./lib/mStable-contracts
 yarn install
 
-echo "Compiling contracts"
-yarn compile
+echo "Compiling contracts and generating typings"
+yarn test-prep

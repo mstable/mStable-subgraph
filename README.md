@@ -21,24 +21,22 @@ and navigate to the `docker` directory in that project (e.g. `cd graph-node/dock
 
 If you're on Linux, run `./setup.sh` in that directory to set the host IP address in the docker config.
 
-At this point, it should be possible to run the node: `docker-compose up`. Check that its
-services are running in the logs (GraphQL, Postgres, and IPFS).
+At this point, it should be possible to run the node: `docker-compose up`. Check that its services are running in the logs (GraphQL, Postgres, and IPFS).
 
-Finally, run Ganache on `http://0.0.0.0:7545` such that it is available to running Docker images.
+Finally, run Ganache on `http://0.0.0.0:7545` such that it is available to running Docker images (`ganache-cli -p 7545 -h 0.0.0.0`)
 
 ### Installation
 
 1. `yarn`
 2. `yarn provision`
-3. `yarn contracts:migrate`
+3. `yarn truffle:migrate`
 4. `yarn codegen`
 
 ### Development
 
-Firstly, the subgraph can be created by running: `yarn create-local`; this should lead to
-a number of logs on the graph node.
+Firstly, the subgraph can be created by running: `yarn create:local`; this should lead to a number of logs on the graph node.
 
-Once the subgraph has been created, it can be deployed at any time with: `yarn deploy-local`.
+Once the subgraph has been created, it can be deployed at any time with: `yarn deploy:local`.
 
 This will cause the graph to start processing blocks and mapping events. Eventually, the
 subgraph will have been (re)created.
@@ -57,4 +55,4 @@ this re-create the `generated` folder.
 3. `yarn codegen`
 4. Ensure correct config in `/config/<network>.json`
 5. `yarn prepare:<network>`
-6. `yarn run deploy <access token>`
+6. `yarn deploy <access token>`
