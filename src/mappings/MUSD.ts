@@ -2,15 +2,15 @@ import { EthereumEvent } from '@graphprotocol/graph-ts'
 import {
   Minted,
   MintedMulti,
+  Swapped,
   Redeemed,
-  RedeemedMulti,
+  RedeemedMasset,
   PaidFee,
-  RedemptionFeeChanged,
-  FeeRecipientChanged,
-} from '../../generated/MUSD/MUSD'
+  SwapFeeChanged,
+} from '../../generated/MUSD/Masset'
 import { Transfer } from '../../generated/MUSD/ERC20Detailed'
 import { handleTokenTransfer } from './Token'
-import { updateMassetFeePool, updateMassetRedemptionFee } from '../models/Masset'
+import { updateMassetSwapFee } from '../models/Masset'
 import { updateBassets } from '../models/Basset'
 
 function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
@@ -39,24 +39,25 @@ export function handleMintedMulti(event: MintedMulti): void {
   handleMintedEvent(event)
 }
 
+export function handleSwapped(event: Swapped): void {
+  // Update vault balances
+  updateBassets(event.address)
+}
+
 export function handleRedeemed(event: Redeemed): void {
   handleRedeemedEvent(event)
 }
 
-export function handleRedeemedMulti(event: RedeemedMulti): void {
+export function handleRedeemedMasset(event: RedeemedMasset): void {
   handleRedeemedEvent(event)
 }
 
 export function handlePaidFee(event: PaidFee): void {
-  // This is handled by the Transfer event
+  // This is handled by the vault balance updating & transfer
 }
 
-export function handleRedemptionFeeChanged(event: RedemptionFeeChanged): void {
-  updateMassetRedemptionFee(event.address, event.params.fee)
-}
-
-export function handleFeeRecipientChanged(event: FeeRecipientChanged): void {
-  updateMassetFeePool(event.address, event.params.feePool)
+export function handleSwapFeeChanged(event: SwapFeeChanged): void {
+  updateMassetSwapFee(event.address, event.params.fee)
 }
 
 export function handleTransfer(event: Transfer): void {

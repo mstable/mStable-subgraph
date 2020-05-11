@@ -47,7 +47,7 @@ type Basset @entity {
   basket: Basket! @derivedFrom(field: "bassets")
 
   """ Target weight of the Basset """
-  targetWeight: BigInt!
+  maxWeight: BigInt!
 
   """ Basset to Masset ratio for quantity conversion """
   ratio: BigInt!
@@ -76,11 +76,11 @@ type Basket @entity {
   """ The collateralisation ratio of the Basket """
   collateralisationRatio: BigInt!
 
-  """ The grace threshold used in Forging """
-  grace: BigInt!
-
   """ Max number of Bassets that can be present in the Basket """
   maxBassets: Int!
+
+  """ Flag for whether the Basket has failed """
+  undergoingRecol: Boolean!
 
   """ Flag for whether the Basket has failed """
   failed: Boolean!

@@ -23,7 +23,7 @@ export function updateBassets(massetAddress: Address): Basset[] {
 
     bassets[i].token = token.id
     bassets[i].ratio = basset.ratio
-    bassets[i].targetWeight = basset.targetWeight
+    bassets[i].maxWeight = basset.maxWeight
     bassets[i].vaultBalance = toDecimal(basset.vaultBalance, token.decimals)
     bassets[i].isTransferFeeCharged = basset.isTransferFeeCharged
     bassets[i].status = mapBassetStatus(basset.status)

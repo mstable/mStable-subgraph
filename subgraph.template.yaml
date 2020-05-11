@@ -6,11 +6,10 @@ schema:
 
 dataSources:
   - kind: ethereum/contract
-    # TODO later: this can be a template (Masset) created via Manager events.
     name: MUSD
     network: '{{network}}'
     source:
-      abi: MUSD
+      abi: Masset
       address: '{{address_mUSD}}'
     mapping:
       kind: ethereum/events
@@ -24,8 +23,6 @@ dataSources:
         - Basset
         - Token
       abis:
-        - name: MUSD
-          file: ./lib/mStable-contracts/build/contracts/MUSD.json
         - name: Masset
           file: ./lib/mStable-contracts/build/contracts/Masset.json
         - name: ERC20Detailed
@@ -33,20 +30,20 @@ dataSources:
         - name: BasketManager
           file: ./lib/mStable-contracts/build/contracts/BasketManager.json
       eventHandlers:
-        - event: Minted(indexed address,uint256,address,uint256)
+        - event: Minted(indexed address,address,uint256,address,uint256)
           handler: handleMinted
-        - event: MintedMulti(indexed address,uint256,address[],uint256[])
+        - event: MintedMulti(indexed address,address,uint256,address[],uint256[])
           handler: handleMintedMulti
-        - event: Redeemed(indexed address,address,uint256,address,uint256)
+        - event: Swapped(indexed address,address,address,uint256,address)
+          handler: handleSwapped
+        - event: Redeemed(indexed address,address,uint256,address[],uint256[])
           handler: handleRedeemed
-        - event: RedeemedMulti(indexed address,address,uint256,address[],uint256[])
-          handler: handleRedeemedMulti
-        - event: PaidFee(address,uint256,uint256)
+        - event: RedeemedMasset(indexed address,address,uint256)
+          handler: handleRedeemedMasset
+        - event: PaidFee(address,address,uint256)
           handler: handlePaidFee
-        - event: RedemptionFeeChanged(uint256)
-          handler: handleRedemptionFeeChanged
-        - event: FeeRecipientChanged(address)
-          handler: handleFeeRecipientChanged
+        - event: SwapFeeChanged(uint256)
+          handler: handleSwapFeeChanged
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
 
@@ -112,10 +109,13 @@ templates:
           handler: handleBassetAdded
         - event: BassetRemoved(indexed address)
           handler: handleBassetRemoved
-        - event: GraceUpdated(uint256)
-          handler: handleGraceChanged
         - event: BasketWeightsUpdated(address[],uint256[])
           handler: handleBasketWeightsUpdated
+        - event: BassetStatusChanged(indexed address,uint8)
+          handler: handleBassetStatusChanged
+        # TODO - add in basket status changing
+        # - event: BasketStatusChanged()
+        #   handler: handleBasketStatusChanged
 
   - kind: ethereum/contract
     name: SavingsContract
