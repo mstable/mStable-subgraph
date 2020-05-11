@@ -28,12 +28,6 @@ export function getOrCreateMasset(address: Address): Masset {
   return upsertMasset(address)
 }
 
-export function updateMassetFeePool(address: Address, feePool: Address): void {
-  let masset = getOrCreateMasset(address)
-  masset.feePool = feePool
-  masset.save()
-}
-
 export function updateMassetSwapFee(address: Address, feeRate: BigInt): void {
   let masset = getOrCreateMasset(address)
   masset.feeRate = feeRate

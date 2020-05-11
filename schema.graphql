@@ -100,9 +100,6 @@ type Masset @entity {
   """ The redemption fee rate """
   feeRate: BigInt!
 
-  """ The address of the fee pool """
-  feePool: Bytes!
-
   """ The underlying Token for this Masset """
   token: Token!
 
