@@ -1,5 +1,6 @@
 {
   "network": "development",
-  "address_mUSD": "0x0dD6b68fDB8C43789601EaC6Da3979C7bbfadc96",
-  "address_SavingsManager": "0x3966E2A451b26E28bE44EC0Bb035232A0f55Fd63"
+  "address_mUSD": "",
+  "address_SavingsManager": "",
+  "address_BasketManager": ""
 }

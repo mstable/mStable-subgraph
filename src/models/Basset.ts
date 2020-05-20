@@ -1,6 +1,6 @@
 import { Address } from '@graphprotocol/graph-ts'
 import { Masset as MassetContract } from '../../generated/MUSD/Masset'
-import { BasketManager } from '../../generated/templates/BasketManager/BasketManager'
+import { BasketManager } from '../../generated/BasketManager/BasketManager'
 import { Basset } from '../../generated/schema'
 import { getOrCreateToken } from './Token'
 import { toDecimal } from '../utils/number'

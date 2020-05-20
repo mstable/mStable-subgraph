@@ -1,8 +1,8 @@
-import { Address, BigInt, EthereumTuple } from '@graphprotocol/graph-ts'
+import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { Basket, Basset, Token } from '../../generated/schema'
 import { updateBassets } from './Basset'
 import { getOrCreateToken } from './Token'
-import { BasketManager } from '../../generated/templates/BasketManager/BasketManager'
+import { BasketManager } from '../../generated/BasketManager/BasketManager'
 import { Masset as MassetContract } from '../../generated/MUSD/Masset'
 
 export function getOrCreateBasket(massetAddress: Address): Basket {

@@ -85,12 +85,12 @@ dataSources:
         - event: InterestWithdrawnByGovernor(indexed address,address,uint256)
           handler: handleInterestWithdrawnByGovernor
 
-templates:
   - kind: ethereum/contract
     name: BasketManager
     network: '{{network}}'
     source:
       abi: BasketManager
+      address: '{{address_BasketManager}}'
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -104,6 +104,10 @@ templates:
       abis:
         - name: BasketManager
           file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+        - name: Masset
+          file: ./lib/mStable-contracts/build/contracts/Masset.json
+        - name: ERC20Detailed
+          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
       eventHandlers:
         - event: BassetAdded(indexed address,address)
           handler: handleBassetAdded
@@ -117,6 +121,7 @@ templates:
         # - event: BasketStatusChanged()
         #   handler: handleBasketStatusChanged
 
+templates:
   - kind: ethereum/contract
     name: SavingsContract
     network: '{{network}}'
