@@ -5,7 +5,7 @@ import {
   BassetAdded,
   BassetStatusChanged,
   BassetRemoved,
-} from '../../generated/templates/BasketManager/BasketManager'
+} from '../../generated/BasketManager/BasketManager'
 import { upsertBasket } from '../models/Basket'
 
 function updateBasketForBasketManagerEvent<TEvent extends EthereumEvent>(
