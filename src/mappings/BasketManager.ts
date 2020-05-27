@@ -31,3 +31,7 @@ export function handleBasketWeightsUpdated(event: BasketWeightsUpdated): void {
 export function handleBassetStatusChanged(event: BassetStatusChanged): void {
   updateBasketForBasketManagerEvent(event)
 }
+
+export function handleBasketStatusChanged(event: BassetStatusChanged): void {
+  updateBasketForBasketManagerEvent(event)
+}

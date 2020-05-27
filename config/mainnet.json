@@ -1,0 +1,6 @@
+{
+  "network": "mainnet",
+  "address_mUSD": "0xe2f2a5C287993345a840Db3B0845fbC70f5935a5",
+  "address_SavingsManager": "0xcEfCBb45BE41331337d49a131faF424D1e50234f",
+  "address_BasketManager": "0x66126B4aA2a1C07536Ef8E5e8bD4EfDA1FdEA96D"
+}

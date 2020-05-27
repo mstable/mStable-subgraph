@@ -52,7 +52,7 @@ this re-create the `generated` folder.
 
 1. `yarn`
 2. `yarn provision` (ensure correct branch or commit sha on mStable-contracts)
-3. `yarn codegen`
-4. Ensure correct config in `/config/<network>.json`
-5. `yarn prepare:<network>`
+3. Ensure correct config in `/config/<network>.json`
+4. `yarn prepare:<network>`
+5. `yarn codegen`
 6. `yarn deploy <access token>`

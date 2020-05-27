@@ -9,10 +9,11 @@
     "build": "yarn graph build",
     "prepare:local": "mustache config/development.json subgraph.template.yaml > subgraph.yaml",
     "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
-    "create": "yarn graph create mStable/mStable-protocol --debug --node https://api.thegraph.com/deploy/",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
     "create:local": "yarn graph create mStable/mStable-protocol --node http://127.0.0.1:8020",
-    "deploy": "yarn graph deploy mStable/mStable-protocol --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
-    "deploy:local": "yarn graph deploy mStable/mStable-protocol --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "deploy:local": "yarn graph deploy mStable/mStable-protocol --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy:ropsten": "yarn graph deploy mStable/mStable-protocol-ropsten --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
+    "deploy:mainnet": "yarn graph deploy mStable/mStable-protocol --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token "
   },
   "doNotRunMe": {
     "create": "graph create jameslefrere/mStable --node https://api.thegraph.com/deploy/",

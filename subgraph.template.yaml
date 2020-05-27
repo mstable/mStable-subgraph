@@ -40,7 +40,7 @@ dataSources:
           handler: handleRedeemed
         - event: RedeemedMasset(indexed address,address,uint256)
           handler: handleRedeemedMasset
-        - event: PaidFee(address,address,uint256)
+        - event: PaidFee(indexed address,address,uint256)
           handler: handlePaidFee
         - event: SwapFeeChanged(uint256)
           handler: handleSwapFeeChanged
@@ -117,9 +117,8 @@ dataSources:
           handler: handleBasketWeightsUpdated
         - event: BassetStatusChanged(indexed address,uint8)
           handler: handleBassetStatusChanged
-        # TODO - add in basket status changing
-        # - event: BasketStatusChanged()
-        #   handler: handleBasketStatusChanged
+        - event: BasketStatusChanged()
+          handler: handleBasketStatusChanged
 
 templates:
   - kind: ethereum/contract
