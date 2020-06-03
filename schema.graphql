@@ -179,3 +179,92 @@ type ExchangeRate @entity {
 
   savingsContract: SavingsContract!
 }
+
+enum TransactionType {
+  MINT,
+  SWAP,
+  REDEEM,
+  EXIT,
+  PAIDFEE,
+  SAVE,
+  WITHDRAW
+}
+
+""" A common transaction type """
+interface Transaction {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  """ Which mAsset is this tx in? """
+  mAsset: Masset!
+
+  mAssetUnits: BigDecimal!
+
+  timestamp: Int!
+
+  sender: Bytes!
+}
+
+# """ Any type of mint here """
+# type MintTransaction implements Transaction @entity {
+#   recipient: Bytes!
+# }
+
+""" A bAsset<>bAsset swap """
+type SwapTransaction implements Transaction @entity {
+
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  """ Which mAsset is this tx in? """
+  mAsset: Masset!
+
+  mAssetUnits: BigDecimal!
+
+  timestamp: Int!
+
+  sender: Bytes!
+
+  inputBasset: Basset!
+
+  outputBasset: Basset!
+
+  recipient: Bytes!
+}
+
+# """ Redeeming single/multi """
+# type RedeemTransaction implements Transaction @entity {
+#   recipient: Bytes!
+# }
+
+# """ RedeemMasset transaction event """
+# type ExitTransaction implements Transaction @entity {
+#   recipient: Bytes!
+# }
+
+""" Log of the Fee payment """
+type FeePaidTransaction implements Transaction @entity {
+
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  """ Which mAsset is this tx in? """
+  mAsset: Masset!
+
+  mAssetUnits: BigDecimal!
+
+  timestamp: Int!
+
+  sender: Bytes!
+
+  asset: Basset!
+}

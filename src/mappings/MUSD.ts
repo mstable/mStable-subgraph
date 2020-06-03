@@ -12,6 +12,10 @@ import { Transfer } from '../../generated/MUSD/ERC20Detailed'
 import { handleTokenTransfer } from './Token'
 import { updateMassetSwapFee } from '../models/Masset'
 import { updateBassets } from '../models/Basset'
+import {
+  getOrCreateSwapTransaction,
+  getOrCreateFeePaidTransaction,
+} from '../models/Transaction'
 
 function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
   // A `Transfer` event should have been emitted; the handler for that
@@ -40,6 +44,7 @@ export function handleMintedMulti(event: MintedMulti): void {
 }
 
 export function handleSwapped(event: Swapped): void {
+  getOrCreateSwapTransaction(event)
   // Update vault balances
   updateBassets(event.address)
 }
@@ -53,6 +58,7 @@ export function handleRedeemedMasset(event: RedeemedMasset): void {
 }
 
 export function handlePaidFee(event: PaidFee): void {
+  getOrCreateFeePaidTransaction(event)
   // This is handled by the vault balance updating & transfer
 }
 
