@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { SavingsContract } from '../../generated/schema'
 import { SavingsContract as SavingsContractTemplate } from '../../generated/templates/SavingsContract/SavingsContract'
 import { toDecimal, ZERO } from '../utils/number'
@@ -39,7 +39,7 @@ export function increaseSavingsContractTotalCredits(
 export function decreaseSavingsContractTotalSavings(
   address: Address,
   amount: BigInt,
-): void {
+): BigDecimal {
   let savingsContract = getOrCreateSavingsContract(address)
 
   savingsContract.totalSavings = savingsContract.totalSavings.minus(
@@ -47,6 +47,8 @@ export function decreaseSavingsContractTotalSavings(
   )
 
   savingsContract.save()
+
+  return savingsContract.totalSavings
 }
 
 export function decreaseSavingsContractTotalCredits(
@@ -70,7 +72,7 @@ export function updateSavingsContractSavingsRate(address: Address, amount: BigIn
   savingsContract.save()
 }
 
-export function updateSavingsContractTotalSavings(address: Address): void {
+export function updateSavingsContractTotalSavings(address: Address): BigDecimal {
   let savingsContract = getOrCreateSavingsContract(address)
   let instance = SavingsContractTemplate.bind(address)
   let totalSavings = instance.totalSavings()
@@ -78,4 +80,6 @@ export function updateSavingsContractTotalSavings(address: Address): void {
   savingsContract.totalSavings = toDecimal(totalSavings, DECIMALS)
 
   savingsContract.save()
+
+  return savingsContract.totalSavings
 }
