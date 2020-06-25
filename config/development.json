@@ -1,6 +1,9 @@
 {
   "network": "development",
   "address_mUSD": "",
+  "startBlock_mUSD": 0,
   "address_SavingsManager": "",
-  "address_BasketManager": ""
+  "startBlock_SavingsManager": 0,
+  "address_BasketManager": "",
+  "startBlock_BasketManager": 0
 }

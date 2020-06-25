@@ -11,6 +11,7 @@ dataSources:
     source:
       abi: Masset
       address: '{{address_mUSD}}'
+      startBlock: {{startBlock_mUSD}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -53,6 +54,7 @@ dataSources:
     source:
       abi: SavingsManager
       address: '{{address_SavingsManager}}'
+      startBlock: {{startBlock_SavingsManager}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -91,6 +93,7 @@ dataSources:
     source:
       abi: BasketManager
       address: '{{address_BasketManager}}'
+      startBlock: {{startBlock_BasketManager}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3

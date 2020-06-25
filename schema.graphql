@@ -190,6 +190,54 @@ enum TransactionType {
   WITHDRAW
 }
 
+enum AggregateMetricType {
+  TOTAL_SUPPLY,
+  TOTAL_SAVINGS,
+}
+
+enum TimeMetricPeriod {
+  HOUR,
+  DAY,
+  WEEK,
+  MONTH,
+  QUARTER,
+  YEAR,
+}
+
+interface TimeMetric {
+  id: ID!
+
+  value: BigDecimal!
+
+  timestamp: Int!
+
+  period: TimeMetricPeriod!
+}
+
+type VolumeMetric implements TimeMetric @entity {
+  id: ID!
+
+  value: BigDecimal!
+
+  timestamp: Int!
+
+  period: TimeMetricPeriod!
+
+  type: TransactionType!
+}
+
+type AggregateMetric implements TimeMetric @entity {
+  id: ID!
+
+  value: BigDecimal!
+
+  timestamp: Int!
+
+  period: TimeMetricPeriod!
+
+  type: AggregateMetricType!
+}
+
 """ A common transaction type """
 interface Transaction {
   id: ID!

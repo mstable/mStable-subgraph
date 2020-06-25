@@ -2,20 +2,26 @@ import { EthereumEvent } from '@graphprotocol/graph-ts'
 import {
   Minted,
   MintedMulti,
-  Swapped,
+  PaidFee,
   Redeemed,
   RedeemedMasset,
-  PaidFee,
   SwapFeeChanged,
+  Swapped,
 } from '../../generated/MUSD/Masset'
 import { Transfer } from '../../generated/MUSD/ERC20Detailed'
 import { handleTokenTransfer } from './Token'
 import { updateMassetSwapFee } from '../models/Masset'
 import { updateBassets } from '../models/Basset'
 import {
-  getOrCreateSwapTransaction,
   getOrCreateFeePaidTransaction,
+  getOrCreateSwapTransaction,
 } from '../models/Transaction'
+import { appendAggregateMetrics, appendVolumeMetrics } from '../models/Metric'
+import { AggregateMetricType, TransactionType } from '../enums'
+import { RATIO, toDecimal } from '../utils/number'
+import { MASSET_DECIMALS } from '../utils/token'
+import { Basset } from '../../generated/schema'
+import { getOrCreateToken } from '../models/Token'
 
 function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
   // A `Transfer` event should have been emitted; the handler for that
@@ -37,24 +43,57 @@ function handleRedeemedEvent<TEvent extends EthereumEvent>(event: TEvent): void 
 
 export function handleMinted(event: Minted): void {
   handleMintedEvent(event)
+
+  appendVolumeMetrics(
+    TransactionType.MINT,
+    toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
 }
 
 export function handleMintedMulti(event: MintedMulti): void {
   handleMintedEvent(event)
+
+  appendVolumeMetrics(
+    TransactionType.MINT,
+    toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
 }
 
 export function handleSwapped(event: Swapped): void {
   getOrCreateSwapTransaction(event)
   // Update vault balances
   updateBassets(event.address)
+
+  let outputBasset = Basset.load(event.params.output.toHexString())
+  let ratioedOutputAmount = event.params.outputAmount.times(outputBasset.ratio).div(RATIO)
+
+  appendVolumeMetrics(
+    TransactionType.SWAP,
+    toDecimal(ratioedOutputAmount, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
 }
 
 export function handleRedeemed(event: Redeemed): void {
   handleRedeemedEvent(event)
+
+  appendVolumeMetrics(
+    TransactionType.REDEEM,
+    toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
 }
 
 export function handleRedeemedMasset(event: RedeemedMasset): void {
   handleRedeemedEvent(event)
+
+  appendVolumeMetrics(
+    TransactionType.REDEEM,
+    toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
 }
 
 export function handlePaidFee(event: PaidFee): void {
@@ -68,4 +107,12 @@ export function handleSwapFeeChanged(event: SwapFeeChanged): void {
 
 export function handleTransfer(event: Transfer): void {
   handleTokenTransfer(event)
+
+  let token = getOrCreateToken(event.address)
+
+  appendAggregateMetrics(
+    AggregateMetricType.TOTAL_SUPPLY,
+    token.totalSupply,
+    event.block.timestamp,
+  )
 }

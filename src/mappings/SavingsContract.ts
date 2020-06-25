@@ -1,22 +1,24 @@
 import {
   AutomaticInterestCollectionSwitched,
+  CreditsRedeemed,
   ExchangeRateUpdated,
   SavingsDeposited,
-  CreditsRedeemed,
 } from '../../generated/templates/SavingsContract/SavingsContract'
 import { getEventId } from '../utils/strings'
 import { decreaseCreditBalance, increaseCreditBalance } from '../models/CreditBalance'
 import { getOrCreateAccount } from '../models/Account'
 import { getOrCreateExchangeRate } from '../models/ExchangeRate'
 import {
+  decreaseSavingsContractTotalCredits,
+  decreaseSavingsContractTotalSavings,
   getOrCreateSavingsContract,
   increaseSavingsContractTotalCredits,
   updateSavingsContractTotalSavings,
-  decreaseSavingsContractTotalCredits,
-  decreaseSavingsContractTotalSavings,
 } from '../models/SavingsContract'
 import { toDecimal } from '../utils/number'
-import { DEFAULT_DECIMALS } from '../utils/token'
+import { MASSET_DECIMALS } from '../utils/token'
+import { appendAggregateMetrics, appendVolumeMetrics } from '../models/Metric'
+import { AggregateMetricType, TransactionType } from '../enums'
 
 export function handleAutomaticInterestCollectionSwitched(
   event: AutomaticInterestCollectionSwitched,
@@ -30,11 +32,17 @@ export function handleExchangeRateUpdated(event: ExchangeRateUpdated): void {
   let eventId = getEventId(event)
   let exchangeRate = getOrCreateExchangeRate(eventId)
   exchangeRate.savingsContract = event.address.toHexString()
-  exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, DEFAULT_DECIMALS)
+  exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, MASSET_DECIMALS)
   exchangeRate.timestamp = event.block.timestamp.toI32()
   exchangeRate.save()
 
-  updateSavingsContractTotalSavings(event.address)
+  let totalSavings = updateSavingsContractTotalSavings(event.address)
+
+  appendAggregateMetrics(
+    AggregateMetricType.TOTAL_SAVINGS,
+    totalSavings,
+    event.block.timestamp,
+  )
 }
 
 export function handleSavingsDeposited(event: SavingsDeposited): void {
@@ -50,7 +58,19 @@ export function handleSavingsDeposited(event: SavingsDeposited): void {
 
   increaseSavingsContractTotalCredits(event.address, event.params.creditsIssued)
 
-  updateSavingsContractTotalSavings(event.address)
+  let totalSavings = updateSavingsContractTotalSavings(event.address)
+
+  appendVolumeMetrics(
+    TransactionType.SAVE,
+    toDecimal(event.params.savingsDeposited, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
+
+  appendAggregateMetrics(
+    AggregateMetricType.TOTAL_SAVINGS,
+    totalSavings,
+    event.block.timestamp,
+  )
 }
 
 export function handleCreditsRedeemed(event: CreditsRedeemed): void {
@@ -66,5 +86,20 @@ export function handleCreditsRedeemed(event: CreditsRedeemed): void {
 
   decreaseSavingsContractTotalCredits(event.address, event.params.creditsRedeemed)
 
-  decreaseSavingsContractTotalSavings(event.address, event.params.savingsCredited)
+  let totalSavings = decreaseSavingsContractTotalSavings(
+    event.address,
+    event.params.savingsCredited,
+  )
+
+  appendVolumeMetrics(
+    TransactionType.WITHDRAW,
+    toDecimal(event.params.savingsCredited, MASSET_DECIMALS),
+    event.block.timestamp,
+  )
+
+  appendAggregateMetrics(
+    AggregateMetricType.TOTAL_SAVINGS,
+    totalSavings,
+    event.block.timestamp,
+  )
 }
