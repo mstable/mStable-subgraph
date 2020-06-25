@@ -93,7 +93,7 @@ export function handleCreditsRedeemed(event: CreditsRedeemed): void {
 
   appendVolumeMetrics(
     TransactionType.WITHDRAW,
-    toDecimal(event.params.creditsRedeemed, MASSET_DECIMALS),
+    toDecimal(event.params.savingsCredited, MASSET_DECIMALS),
     event.block.timestamp,
   )
 
