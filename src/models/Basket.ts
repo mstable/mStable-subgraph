@@ -20,7 +20,9 @@ export function upsertBasket(massetAddress: Address): Basket {
   let bassets = updateBassets(massetAddress)
 
   let massetContract = MassetContract.bind(massetAddress)
-  let basketManagerContract = BasketManager.bind(massetContract.getBasketManager())
+  let basketManagerContract = BasketManager.bind(
+    massetContract.getBasketManager(),
+  )
   let basketData = basketManagerContract.getBasket()
 
   basket.bassets = bassets.map<string>((basset: Basset) => basset.id)

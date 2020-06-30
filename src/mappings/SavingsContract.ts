@@ -5,7 +5,10 @@ import {
   SavingsDeposited,
 } from '../../generated/templates/SavingsContract/SavingsContract'
 import { getEventId } from '../utils/strings'
-import { decreaseCreditBalance, increaseCreditBalance } from '../models/CreditBalance'
+import {
+  decreaseCreditBalance,
+  increaseCreditBalance,
+} from '../models/CreditBalance'
 import { getOrCreateAccount } from '../models/Account'
 import { getOrCreateExchangeRate } from '../models/ExchangeRate'
 import {
@@ -32,7 +35,10 @@ export function handleExchangeRateUpdated(event: ExchangeRateUpdated): void {
   let eventId = getEventId(event)
   let exchangeRate = getOrCreateExchangeRate(eventId)
   exchangeRate.savingsContract = event.address.toHexString()
-  exchangeRate.exchangeRate = toDecimal(event.params.newExchangeRate, MASSET_DECIMALS)
+  exchangeRate.exchangeRate = toDecimal(
+    event.params.newExchangeRate,
+    MASSET_DECIMALS,
+  )
   exchangeRate.timestamp = event.block.timestamp.toI32()
   exchangeRate.save()
 
@@ -84,7 +90,10 @@ export function handleCreditsRedeemed(event: CreditsRedeemed): void {
   )
   creditBalance.save()
 
-  decreaseSavingsContractTotalCredits(event.address, event.params.creditsRedeemed)
+  decreaseSavingsContractTotalCredits(
+    event.address,
+    event.params.creditsRedeemed,
+  )
 
   let totalSavings = decreaseSavingsContractTotalSavings(
     event.address,

@@ -1,5 +1,5 @@
 import { BigInt } from '@graphprotocol/graph-ts'
-import { Account, CreditBalance, SavingsContract, Token } from '../../generated/schema'
+import { Account, CreditBalance, SavingsContract } from '../../generated/schema'
 import { toDecimal, ZERO } from '../utils/number'
 
 export function getOrCreateCreditBalance(

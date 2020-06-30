@@ -1,5 +1,9 @@
 import { BigInt } from '@graphprotocol/graph-ts'
-import { Basset, FeePaidTransaction, SwapTransaction } from './../../generated/schema'
+import {
+  Basset,
+  FeePaidTransaction,
+  SwapTransaction,
+} from './../../generated/schema'
 import { PaidFee, Swapped } from './../../generated/MUSD/Masset'
 import { RATIO, toDecimal } from '../utils/number'
 
@@ -18,7 +22,9 @@ export function getOrCreateSwapTransaction(event: Swapped): SwapTransaction {
   transaction.type = type
   transaction.mAsset = event.address.toHex()
   let outputBasset = Basset.load(event.params.output.toHexString())
-  let ratioedOutputAmount = event.params.outputAmount.times(outputBasset.ratio).div(RATIO)
+  let ratioedOutputAmount = event.params.outputAmount
+    .times(outputBasset.ratio)
+    .div(RATIO)
   transaction.mAssetUnits = toDecimal(ratioedOutputAmount, 18)
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.sender = event.params.swapper
@@ -29,7 +35,9 @@ export function getOrCreateSwapTransaction(event: Swapped): SwapTransaction {
   return transaction as SwapTransaction
 }
 
-export function getOrCreateFeePaidTransaction(event: PaidFee): FeePaidTransaction {
+export function getOrCreateFeePaidTransaction(
+  event: PaidFee,
+): FeePaidTransaction {
   let txHash = event.transaction.hash
   let type = 'PAIDFEE'
   let id = txHash.toHexString().concat(type)
@@ -44,7 +52,9 @@ export function getOrCreateFeePaidTransaction(event: PaidFee): FeePaidTransactio
   transaction.type = type
   transaction.mAsset = event.address.toHex()
   let paidInBasset = Basset.load(event.params.asset.toHexString())
-  let ratioedOutputAmount = BigInt.fromI32(<i32>event.params.feeQuantity as i32)
+  let ratioedOutputAmount = BigInt.fromI32(
+    (<i32>event.params.feeQuantity) as i32,
+  )
     .times(paidInBasset.ratio)
     .div(RATIO)
   transaction.mAssetUnits = toDecimal(ratioedOutputAmount, 18)

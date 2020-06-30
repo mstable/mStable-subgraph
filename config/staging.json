@@ -5,5 +5,9 @@
   "address_SavingsManager": "0xcEfCBb45BE41331337d49a131faF424D1e50234f",
   "startBlock_SavingsManager": 10000000,
   "address_BasketManager": "0x66126B4aA2a1C07536Ef8E5e8bD4EfDA1FdEA96D",
-  "startBlock_BasketManager": 10000000
+  "startBlock_BasketManager": 10000000,
+  "address_RewardsDistributor": "",
+  "startBlock_RewardsDistributor": 0,
+  "address_MTA": "",
+  "startBlock_MTA": 0
 }

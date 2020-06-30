@@ -7,7 +7,9 @@ import { toDecimal } from '../utils/number'
 
 export function updateBassets(massetAddress: Address): Basset[] {
   let massetContract = MassetContract.bind(massetAddress)
-  let basketManagerContract = BasketManager.bind(massetContract.getBasketManager())
+  let basketManagerContract = BasketManager.bind(
+    massetContract.getBasketManager(),
+  )
   let unparsedBassets = basketManagerContract.getBassets()
 
   let bassets = new Array<Basset>()
@@ -33,7 +35,6 @@ export function updateBassets(massetAddress: Address): Basset[] {
   return bassets
 }
 
-// @ts-ignore
 function mapBassetStatus(status: u32): string {
   switch (status) {
     case 0:
