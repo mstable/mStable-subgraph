@@ -22,6 +22,40 @@ export enum AggregateMetricType {
   TOTAL_SAVINGS,
 }
 
+export enum StakingRewardsContractType {
+  STAKING_REWARDS,
+  STAKING_REWARDS_WITH_PLATFORM_TOKEN,
+}
+
+export enum StakingRewardType {
+  REWARD,
+  PLATFORM_REWARD,
+}
+
+export function mapStakingRewardsContractType(
+  type: StakingRewardsContractType,
+): string {
+  switch (type) {
+    case StakingRewardsContractType.STAKING_REWARDS:
+      return 'STAKING_REWARDS'
+    case StakingRewardsContractType.STAKING_REWARDS_WITH_PLATFORM_TOKEN:
+      return 'STAKING_REWARDS_WITH_PLATFORM_TOKEN'
+    default:
+      return ''
+  }
+}
+
+export function mapStakingRewardType(type: StakingRewardType): string {
+  switch (type) {
+    case StakingRewardType.PLATFORM_REWARD:
+      return 'PLATFORM_REWARD'
+    case StakingRewardType.REWARD:
+      return 'REWARD'
+    default:
+      return ''
+  }
+}
+
 export function mapTimeMetricPeriod(period: TimeMetricPeriod): string {
   switch (period) {
     case TimeMetricPeriod.DAY:
@@ -65,9 +99,9 @@ export function mapTransactionType(type: TransactionType): string {
 export function mapAggregateMetricType(type: AggregateMetricType): string {
   switch (type) {
     case AggregateMetricType.TOTAL_SAVINGS:
-      return 'TOTAL_SAVINGS';
+      return 'TOTAL_SAVINGS'
     case AggregateMetricType.TOTAL_SUPPLY:
-      return 'TOTAL_SUPPLY';
+      return 'TOTAL_SUPPLY'
     default:
       return ''
   }

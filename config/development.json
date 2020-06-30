@@ -1,9 +1,13 @@
 {
   "network": "development",
-  "address_mUSD": "",
+  "address_mUSD": "0x067400c5B14ea084826866869DfdedF1Fff71319",
   "startBlock_mUSD": 0,
-  "address_SavingsManager": "",
+  "address_SavingsManager": "0xc4802c0db9E5dE5222A41342B7e667117b1D610A",
   "startBlock_SavingsManager": 0,
-  "address_BasketManager": "",
-  "startBlock_BasketManager": 0
+  "address_BasketManager": "0x4Fb3070b00EDDAFabBAfE70d40EB4aDec13D98f2",
+  "startBlock_BasketManager": 0,
+  "address_RewardsDistributor": "0xa5Be409c1d6944876225B38e2deEE1bd3A4bB140",
+  "startBlock_RewardsDistributor": 0,
+  "address_MTA": "0x7597345e48FaB35ed06be388167deF5723C4AF1a",
+  "startBlock_MTA": 0
 }

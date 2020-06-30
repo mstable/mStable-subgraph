@@ -1,9 +1,6 @@
 import {
   SavingsContractAdded,
   SavingsRateChanged,
-  InterestCollected,
-  InterestDistributed,
-  InterestWithdrawnByGovernor,
 } from '../../generated/SavingsManager/SavingsManager'
 import { SavingsContract } from '../../generated/templates'
 import { getOrCreateMasset } from '../models/Masset'
@@ -31,18 +28,4 @@ export function handleSavingsContractAdded(event: SavingsContractAdded): void {
 
 export function handleSavingsRateChanged(event: SavingsRateChanged): void {
   updateSavingsContractSavingsRate(event.address, event.params.newSavingsRate)
-}
-
-export function handleInterestCollected(event: InterestCollected): void {
-  // A `Transfer` event is emitted, which should suffice
-}
-
-export function handleInterestDistributed(event: InterestDistributed): void {
-  // A `Transfer` event is emitted, which should suffice
-}
-
-export function handleInterestWithdrawnByGovernor(
-  event: InterestWithdrawnByGovernor,
-): void {
-  // A `Transfer` event is emitted, which should suffice
 }

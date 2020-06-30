@@ -32,7 +32,9 @@ function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
   updateBassets(event.address)
 }
 
-function handleRedeemedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
+function handleRedeemedEvent<TEvent extends EthereumEvent>(
+  event: TEvent,
+): void {
   // A `Transfer` event should also have been emitted; the handler for that
   // event will adjust the Masset token balance and total supply.
   // Basset token events are not tracked.
@@ -67,7 +69,9 @@ export function handleSwapped(event: Swapped): void {
   updateBassets(event.address)
 
   let outputBasset = Basset.load(event.params.output.toHexString())
-  let ratioedOutputAmount = event.params.outputAmount.times(outputBasset.ratio).div(RATIO)
+  let ratioedOutputAmount = event.params.outputAmount
+    .times(outputBasset.ratio)
+    .div(RATIO)
 
   appendVolumeMetrics(
     TransactionType.SWAP,
