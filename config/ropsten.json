@@ -1,9 +1,9 @@
 {
   "network": "ropsten",
   "address_mUSD": "0x4E1000616990D83e56f4b5fC6CC8602DcfD20459",
-  "startBlock_mUSD": 7000000,
+  "startBlock_mUSD": 8100000,
   "address_SavingsManager": "0x22491baF7e522a63c658F654d73D49fF0415F77f",
-  "startBlock_SavingsManager": 7000000,
+  "startBlock_SavingsManager": 8100000,
   "address_BasketManager": "0x7AE685713D0dcccccE3D936D3E0FA382639839Df",
-  "startBlock_BasketManager": 7000000
+  "startBlock_BasketManager": 8100000
 }
