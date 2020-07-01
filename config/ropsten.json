@@ -1,9 +1,9 @@
 {
   "network": "ropsten",
-  "address_mUSD": "0xE5BFd72378fF24820C3eE4fD35352EeA39C13fb6",
+  "address_mUSD": "0x4E1000616990D83e56f4b5fC6CC8602DcfD20459",
   "startBlock_mUSD": 7000000,
-  "address_SavingsManager": "0xBdAa66E59754C0174A0872174024267B161A75E2",
+  "address_SavingsManager": "0x22491baF7e522a63c658F654d73D49fF0415F77f",
   "startBlock_SavingsManager": 7000000,
-  "address_BasketManager": "0x83e5e769231dbb29022b5781775522065065826f",
+  "address_BasketManager": "0x7AE685713D0dcccccE3D936D3E0FA382639839Df",
   "startBlock_BasketManager": 7000000
 }
