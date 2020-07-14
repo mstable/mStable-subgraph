@@ -11,7 +11,8 @@ export function upsertMasset(address: Address): Masset {
   let basket = getOrCreateBasket(address)
 
   masset.feeRate = contract.swapFee()
-  masset.redemptionFeeRate = contract.redemptionFee()
+  let attempt = contract.try_redemptionFee()
+  masset.redemptionFeeRate = attempt.reverted ? BigInt.fromI32(0) : attempt.value
   masset.token = token.id
   masset.tokenSymbol = token.symbol
   masset.basket = basket.id
