@@ -45,6 +45,8 @@ dataSources:
           handler: handlePaidFee
         - event: SwapFeeChanged(uint256)
           handler: handleSwapFeeChanged
+        - event: RedemptionFeeChanged(uint256)
+          handler: handleRedemptionFeeChanged
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
 

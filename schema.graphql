@@ -97,8 +97,11 @@ type Masset @entity {
   """ The Basket of Bassets for this Masset """
   basket: Basket!
 
-  """ The redemption fee rate """
+  """ The swap fee rate """
   feeRate: BigInt!
+
+  """ The swap fee rate """
+  redemptionFeeRate: BigInt!
 
   """ The underlying Token for this Masset """
   token: Token!
