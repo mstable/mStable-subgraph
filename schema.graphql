@@ -563,6 +563,12 @@ type StakingRewardsContract @entity {
   stakingBalances: [StakingBalance!]!
     @derivedFrom(field: "stakingRewardsContract")
 
+  """
+  Accessor for staking rewards kept on this contract
+  """
+  stakingRewards: [StakingReward!]!
+    @derivedFrom(field: "stakingRewardsContract")
+
   #######################################################
   # For type `STAKING_REWARDS_WITH_PLATFORM_TOKEN` only #
 
