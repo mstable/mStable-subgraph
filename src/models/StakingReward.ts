@@ -7,7 +7,8 @@ export function getOrCreateStakingReward(
   account: Address,
   type: StakingRewardType,
 ): StakingReward {
-  let id: string = contractAddress.toHexString() + account.toHexString()
+  let id: string =
+    contractAddress.toHexString() + account.toHexString() + type.toString()
 
   let stakingReward = StakingReward.load(id)
 
