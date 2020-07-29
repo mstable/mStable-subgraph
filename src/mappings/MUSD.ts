@@ -6,11 +6,12 @@ import {
   Redeemed,
   RedeemedMasset,
   SwapFeeChanged,
+  RedemptionFeeChanged,
   Swapped,
 } from '../../generated/MUSD/Masset'
 import { Transfer } from '../../generated/MUSD/ERC20Detailed'
 import { handleTokenTransfer } from './Token'
-import { updateMassetSwapFee } from '../models/Masset'
+import { updateMassetSwapFee, updateMassetRedemptionFee } from '../models/Masset'
 import { updateBassets } from '../models/Basset'
 import {
   getOrCreateFeePaidTransaction,
@@ -107,6 +108,10 @@ export function handlePaidFee(event: PaidFee): void {
 
 export function handleSwapFeeChanged(event: SwapFeeChanged): void {
   updateMassetSwapFee(event.address, event.params.fee)
+}
+
+export function handleRedemptionFeeChanged(event: RedemptionFeeChanged): void {
+  updateMassetRedemptionFee(event.address, event.params.fee)
 }
 
 export function handleTransfer(event: Transfer): void {
