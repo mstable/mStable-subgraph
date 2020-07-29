@@ -13,6 +13,11 @@ import {
   handleRewardPaidForType,
   handleWithdrawnForType,
 } from './shared'
+import {
+  getOrCreateStakingRewardsContractRewardPaidTransaction,
+  getOrCreateStakingRewardsContractWithdrawTransaction,
+  getOrCreateStakingRewardsContractStakeTransaction,
+} from '../../models/Transaction'
 
 export function handleRewardAdded(event: RewardAdded): void {
   handleRewardAddedForType(
@@ -27,6 +32,7 @@ export function handleStaked(event: Staked): void {
     StakingRewardsContractType.STAKING_REWARDS,
     event.params.user,
   )
+  getOrCreateStakingRewardsContractStakeTransaction(event)
 }
 
 export function handleWithdrawn(event: Withdrawn): void {
@@ -35,6 +41,7 @@ export function handleWithdrawn(event: Withdrawn): void {
     StakingRewardsContractType.STAKING_REWARDS,
     event.params.user,
   )
+  getOrCreateStakingRewardsContractWithdrawTransaction(event)
 }
 
 export function handleRewardPaid(event: RewardPaid): void {
@@ -43,6 +50,7 @@ export function handleRewardPaid(event: RewardPaid): void {
     StakingRewardsContractType.STAKING_REWARDS,
     event.params.user,
   )
+  getOrCreateStakingRewardsContractRewardPaidTransaction(event)
 }
 
 export function handleRewardsVaultSet(event: RewardsVaultSet): void {

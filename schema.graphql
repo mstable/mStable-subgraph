@@ -1,11 +1,15 @@
 enum TransactionType {
-  MINT
-  SWAP
-  REDEEM
-  EXIT
-  PAIDFEE
-  SAVE
-  WITHDRAW
+  MASSET_MINT
+  MASSET_SWAP
+  MASSET_REDEEM
+  MASSET_REDEEM_MASSET
+  MASSET_PAID_FEE
+  SAVINGS_CONTRACT_DEPOSIT
+  SAVINGS_CONTRACT_WITHDRAW
+  STAKING_REWARDS_CONTRACT_CLAIM_REWARD
+  STAKING_REWARDS_CONTRACT_EXIT
+  STAKING_REWARDS_CONTRACT_STAKE
+  STAKING_REWARDS_CONTRACT_WITHDRAW
 }
 
 enum AggregateMetricType {
@@ -333,13 +337,6 @@ interface Transaction {
 
   type: TransactionType!
 
-  """
-  Which mAsset is this tx in?
-  """
-  mAsset: Masset!
-
-  mAssetUnits: BigDecimal!
-
   timestamp: Int!
 
   sender: Bytes!
@@ -360,16 +357,16 @@ type SwapTransaction implements Transaction @entity {
 
   type: TransactionType!
 
+  sender: Bytes!
+
+  timestamp: Int!
+
   """
   Which mAsset is this tx in?
   """
   mAsset: Masset!
 
   mAssetUnits: BigDecimal!
-
-  timestamp: Int!
-
-  sender: Bytes!
 
   inputBasset: Basset!
 
@@ -398,6 +395,10 @@ type FeePaidTransaction implements Transaction @entity {
 
   type: TransactionType!
 
+  timestamp: Int!
+
+  sender: Bytes!
+
   """
   Which mAsset is this tx in?
   """
@@ -405,11 +406,69 @@ type FeePaidTransaction implements Transaction @entity {
 
   mAssetUnits: BigDecimal!
 
-  timestamp: Int!
+  asset: Basset!
+}
+
+type StakingRewardsContractTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
 
   sender: Bytes!
 
-  asset: Basset!
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+}
+
+type StakingRewardsContractClaimRewardTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+
+  amount: BigInt!
+}
+
+type StakingRewardsContractStakeTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+
+  amount: BigInt!
+}
+
+type StakingRewardsContractWithdrawTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+
+  amount: BigInt!
 }
 
 type RewardsDistributor @entity {

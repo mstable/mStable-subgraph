@@ -1,11 +1,15 @@
 export enum TransactionType {
-  MINT,
-  SWAP,
-  REDEEM,
-  EXIT,
-  PAIDFEE,
-  SAVE,
-  WITHDRAW,
+  MASSET_MINT,
+  MASSET_SWAP,
+  MASSET_REDEEM,
+  MASSET_REDEEM_MASSET,
+  MASSET_PAID_FEE,
+  SAVINGS_CONTRACT_DEPOSIT,
+  SAVINGS_CONTRACT_WITHDRAW,
+  STAKING_REWARDS_CONTRACT_CLAIM_REWARD,
+  STAKING_REWARDS_CONTRACT_EXIT,
+  STAKING_REWARDS_CONTRACT_STAKE,
+  STAKING_REWARDS_CONTRACT_WITHDRAW,
 }
 
 export enum TimeMetricPeriod {
@@ -77,20 +81,28 @@ export function mapTimeMetricPeriod(period: TimeMetricPeriod): string {
 
 export function mapTransactionType(type: TransactionType): string {
   switch (type) {
-    case TransactionType.MINT:
-      return 'MINT'
-    case TransactionType.SWAP:
-      return 'SWAP'
-    case TransactionType.REDEEM:
-      return 'REDEEM'
-    case TransactionType.EXIT:
-      return 'EXIT'
-    case TransactionType.PAIDFEE:
-      return 'PAIDFEE'
-    case TransactionType.SAVE:
-      return 'SAVE'
-    case TransactionType.WITHDRAW:
-      return 'WITHDRAW'
+    case TransactionType.MASSET_MINT:
+      return 'MASSET_MINT'
+    case TransactionType.MASSET_SWAP:
+      return 'MASSET_SWAP'
+    case TransactionType.MASSET_REDEEM:
+      return 'MASSET_REDEEM'
+    case TransactionType.MASSET_REDEEM_MASSET:
+      return 'MASSET_REDEEM_MASSET'
+    case TransactionType.MASSET_PAID_FEE:
+      return 'MASSET_PAID_FEE'
+    case TransactionType.SAVINGS_CONTRACT_DEPOSIT:
+      return 'SAVINGS_CONTRACT_DEPOSIT'
+    case TransactionType.SAVINGS_CONTRACT_WITHDRAW:
+      return 'SAVINGS_CONTRACT_WITHDRAW'
+    case TransactionType.STAKING_REWARDS_CONTRACT_CLAIM_REWARD:
+      return 'STAKING_REWARDS_CONTRACT_CLAIM_REWARD'
+    case TransactionType.STAKING_REWARDS_CONTRACT_EXIT:
+      return 'STAKING_REWARDS_CONTRACT_EXIT'
+    case TransactionType.STAKING_REWARDS_CONTRACT_STAKE:
+      return 'STAKING_REWARDS_CONTRACT_STAKE'
+    case TransactionType.STAKING_REWARDS_CONTRACT_WITHDRAW:
+      return 'STAKING_REWARDS_CONTRACT_WITHDRAW'
     default:
       return ''
   }

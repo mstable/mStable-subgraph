@@ -48,7 +48,7 @@ export function handleMinted(event: Minted): void {
   handleMintedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.MINT,
+    TransactionType.MASSET_MINT,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -58,7 +58,7 @@ export function handleMintedMulti(event: MintedMulti): void {
   handleMintedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.MINT,
+    TransactionType.MASSET_MINT,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -75,7 +75,7 @@ export function handleSwapped(event: Swapped): void {
     .div(RATIO)
 
   appendVolumeMetrics(
-    TransactionType.SWAP,
+    TransactionType.MASSET_SWAP,
     toDecimal(ratioedOutputAmount, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -85,7 +85,7 @@ export function handleRedeemed(event: Redeemed): void {
   handleRedeemedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.REDEEM,
+    TransactionType.MASSET_REDEEM,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -95,7 +95,7 @@ export function handleRedeemedMasset(event: RedeemedMasset): void {
   handleRedeemedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.REDEEM,
+    TransactionType.MASSET_REDEEM_MASSET,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
