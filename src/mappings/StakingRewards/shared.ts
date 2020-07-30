@@ -9,9 +9,6 @@ import {
 } from '../../models/StakingRewardsContract'
 import { StakingRewards } from '../../../generated/templates/StakingRewards/StakingRewards'
 import { StakingRewardsWithPlatformToken } from '../../../generated/templates/StakingRewardsWithPlatformToken/StakingRewardsWithPlatformToken'
-import { getOrCreateRewardsVault } from '../../models/RewardsVault'
-
-import { RewardsVault as RewardsVaultTemplate } from '../../../generated/templates'
 import { getOrCreateStakingBalance } from '../../models/StakingBalance'
 
 function updateStakingRewards(
@@ -131,26 +128,4 @@ export function handleRewardPaidForType(
   updateStakingRewards(contractAddress, type)
   updateUserRewards(contractAddress, type, user)
   updateUserStakingBalance(contractAddress, type, user)
-}
-
-export function handleRewardsVaultSetForType(
-  contractAddress: Address,
-  type: StakingRewardsContractType,
-  newVault: Address,
-): void {
-  // Update the `rewardsVault` property
-  {
-    let stakingRewards = getOrCreateStakingRewardsContract(
-      contractAddress,
-      StakingRewardsContractType.STAKING_REWARDS,
-    )
-    stakingRewards.rewardsVault = newVault.toHexString()
-    stakingRewards.save()
-  }
-
-  // Track the new `RewardsVault` contract and create the entity
-  {
-    getOrCreateRewardsVault(newVault)
-    RewardsVaultTemplate.create(newVault)
-  }
 }

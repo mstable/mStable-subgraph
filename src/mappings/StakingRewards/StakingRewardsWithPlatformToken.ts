@@ -1,7 +1,6 @@
 import {
   RewardAdded,
   RewardPaid,
-  RewardsVaultSet,
   Staked,
   Withdrawn,
 } from '../../../generated/templates/StakingRewardsWithPlatformToken/StakingRewardsWithPlatformToken'
@@ -9,7 +8,6 @@ import { StakingRewardsContractType } from '../../enums'
 import {
   handleRewardAddedForType,
   handleStakedForType,
-  handleRewardsVaultSetForType,
   handleRewardPaidForType,
   handleWithdrawnForType,
 } from './shared'
@@ -42,13 +40,5 @@ export function handleRewardPaid(event: RewardPaid): void {
     event.address,
     StakingRewardsContractType.STAKING_REWARDS_WITH_PLATFORM_TOKEN,
     event.params.user,
-  )
-}
-
-export function handleRewardsVaultSet(event: RewardsVaultSet): void {
-  handleRewardsVaultSetForType(
-    event.address,
-    StakingRewardsContractType.STAKING_REWARDS_WITH_PLATFORM_TOKEN,
-    event.params.newVault,
   )
 }

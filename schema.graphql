@@ -483,47 +483,6 @@ type RewardsDistributor @entity {
   fundManagers: [Bytes!]!
 }
 
-type RewardsVault @entity {
-  """
-  Address of the rewards vault contract
-  """
-  id: ID!
-
-  """
-  Timestamp for the start of the vault's first period
-  """
-  vaultStartTime: Int!
-
-  """
-  Period interval in seconds
-  """
-  period: Int!
-
-  """
-  The number of periods rewards are locked up in
-  """
-  lockupPeriods: Int!
-
-  """
-  Flag for whether all rewards have been unlocked
-  """
-  allRewardsUnlocked: Boolean!
-
-  """
-  The token for vested funds
-  """
-  vestingToken: Token!
-
-  """
-  The staking rewards contract using this vault
-  """
-  stakingRewardsContract: StakingRewardsContract!
-
-  """
-  Accessor for vault balances kept in this vault
-  """
-  vaultBalances: [VaultBalance!]! @derivedFrom(field: "rewardsVault")
-}
 
 type StakingReward @entity {
   # contract + account
@@ -602,11 +561,6 @@ type StakingRewardsContract @entity {
   rewardsToken: Token!
 
   """
-  Rewards vault
-  """
-  rewardsVault: RewardsVault!
-
-  """
   Rewards distributor
   """
   rewardsDistributor: RewardsDistributor!
@@ -677,34 +631,4 @@ type StakingBalance @entity {
   Staking balance amount
   """
   amount: BigInt!
-}
-
-type VaultBalance @entity {
-  # rewardsVault + account + period
-  id: ID!
-
-  """
-  Account this vault balance belongs to
-  """
-  account: Bytes!
-
-  """
-  Rewards vault contract this vault balance is kept on
-  """
-  rewardsVault: RewardsVault!
-
-  """
-  Vault balance amount
-  """
-  amount: BigInt!
-
-  """
-  Vesting period for this vault balance
-  """
-  period: Int!
-
-  """
-  Flag for whether this vault balance was vested
-  """
-  vested: Boolean!
 }

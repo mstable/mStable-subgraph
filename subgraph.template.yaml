@@ -157,7 +157,6 @@ dataSources:
         - Account
         - StakingRewards
         - StakingRewardsWithPlatformToken
-        - RewardsVault
       abis:
         - name: RewardsDistributor
           file: ./lib/mStable-contracts/build/contracts/RewardsDistributor.json
@@ -167,8 +166,6 @@ dataSources:
           file: ./lib/mStable-contracts/build/contracts/StakingRewardsWithPlatformToken.json
         - name: ERC20Detailed
           file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
-        - name: RewardsVault
-          file: ./lib/mStable-contracts/build/contracts/RewardsVault.json
       eventHandlers:
         - event: RemovedFundManager(indexed address)
           handler: handleRemovedFundManager
@@ -204,29 +201,6 @@ templates:
           handler: handleCreditsRedeemed
 
   - kind: ethereum/contract
-    name: RewardsVault
-    network: '{{network}}'
-    source:
-      abi: RewardsVault
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/mappings/RewardsVault.ts
-      entities:
-        - RewardsVault
-      abis:
-        - name: RewardsVault
-          file: ./lib/mStable-contracts/build/contracts/RewardsVault.json
-      eventHandlers:
-        - event: Deposited(indexed address,uint256,uint256)
-          handler: handleDeposited
-        - event: Vested(indexed address,uint256,uint256[])
-          handler: handleVested
-        - event: AllRewardsUnlocked()
-          handler: handleAllRewardsUnlocked
-
-  - kind: ethereum/contract
     name: StakingRewards
     network: '{{network}}'
     source:
@@ -238,12 +212,9 @@ templates:
       file: ./src/mappings/StakingRewards/StakingRewards.ts
       entities:
         - StakingRewardsContract
-        - RewardsVault
       abis:
         - name: StakingRewards
           file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
-        - name: RewardsVault
-          file: ./lib/mStable-contracts/build/contracts/RewardsVault.json
       eventHandlers:
         - event: RewardAdded(uint256)
           handler: handleRewardAdded
@@ -253,8 +224,6 @@ templates:
           handler: handleWithdrawn
         - event: RewardPaid(indexed address,uint256)
           handler: handleRewardPaid
-        - event: RewardsVaultSet(address)
-          handler: handleRewardsVaultSet
 
   - kind: ethereum/contract
     name: StakingRewardsWithPlatformToken
@@ -268,14 +237,11 @@ templates:
       file: ./src/mappings/StakingRewards/StakingRewardsWithPlatformToken.ts
       entities:
         - StakingRewardsContract
-        - RewardsVault
       abis:
         - name: StakingRewards
           file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
         - name: StakingRewardsWithPlatformToken
           file: ./lib/mStable-contracts/build/contracts/StakingRewardsWithPlatformToken.json
-        - name: RewardsVault
-          file: ./lib/mStable-contracts/build/contracts/RewardsVault.json
       eventHandlers:
         - event: RewardAdded(uint256,uint256)
           handler: handleRewardAdded
@@ -285,5 +251,3 @@ templates:
           handler: handleWithdrawn
         - event: RewardPaid(indexed address,uint256,uint256)
           handler: handleRewardPaid
-        - event: RewardsVaultSet(address)
-          handler: handleRewardsVaultSet

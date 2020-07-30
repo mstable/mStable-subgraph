@@ -7,7 +7,6 @@ import {
 import {
   StakingRewards as StakingRewardsTemplate,
   StakingRewardsWithPlatformToken as StakingRewardsWithPlatformTokenTemplate,
-  RewardsVault as RewardsVaultTemplate,
 } from '../../generated/templates'
 import { StakingRewards } from '../../generated/RewardsDistributor/StakingRewards'
 import { StakingRewardsWithPlatformToken } from '../../generated/RewardsDistributor/StakingRewardsWithPlatformToken'
@@ -15,7 +14,6 @@ import {
   RewardsDistributor,
   StakingRewardsContract,
 } from '../../generated/schema'
-import { getOrCreateRewardsVault } from '../models/RewardsVault'
 import { getOrCreateToken } from '../models/Token'
 import { getOrCreateStakingRewardsContract } from '../models/StakingRewardsContract'
 import { StakingRewardsContractType } from '../enums'
@@ -90,15 +88,6 @@ export function handleDistributedReward(event: DistributedReward): void {
           getOrCreateToken(address)
         }
 
-        // Track the rewards vault and create the entity
-        {
-          let address = contract.rewardsVault()
-          if (address.toHexString() !== ZERO_ADDRESS) {
-            RewardsVaultTemplate.create(address)
-            getOrCreateRewardsVault(address)
-          }
-        }
-
         return
       }
     }
@@ -117,15 +106,6 @@ export function handleDistributedReward(event: DistributedReward): void {
       {
         let address = contract.stakingToken()
         getOrCreateToken(address)
-      }
-
-      // Track the rewards vault and create the entity
-      {
-        let address = contract.rewardsVault()
-        if (address.toHexString() !== ZERO_ADDRESS) {
-          RewardsVaultTemplate.create(address)
-          getOrCreateRewardsVault(address)
-        }
       }
 
       return

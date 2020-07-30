@@ -36,7 +36,6 @@ export function getOrCreateStakingRewardsContract(
       .rewardsDistributor()
       .toHexString()
     stakingRewards.rewardsToken = contract.rewardsToken().toHexString()
-    stakingRewards.rewardsVault = contract.rewardsVault().toHexString()
     stakingRewards.rewardPerTokenStored = contract.rewardPerTokenStored()
     stakingRewards.totalStakingRewards = getTotalRewards(rewardRate, duration)
     stakingRewards.totalSupply = contract.totalSupply()
