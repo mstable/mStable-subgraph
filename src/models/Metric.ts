@@ -1,4 +1,4 @@
-import { BigDecimal, BigInt, log } from '@graphprotocol/graph-ts'
+import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { AggregateMetric, VolumeMetric } from '../../generated/schema'
 import {
   mapTransactionType,
@@ -38,7 +38,6 @@ function getOrCreateVolumeMetricHour(
 ): VolumeMetric {
   let hourTimestamp = roundDownToHour(timestamp)
   let id = getVolumeMetricId(type, TimeMetricPeriod.HOUR, hourTimestamp)
-  log.info('hour id {} => {}', [timestamp.toString(), hourTimestamp.toString()])
   let metric = VolumeMetric.load(id)
 
   if (metric != null) {
@@ -106,7 +105,6 @@ function getOrCreateAggregateMetricHour(
 ): AggregateMetric {
   let hourTimestamp = roundDownToHour(timestamp)
   let id = getAggregateMetricId(type, TimeMetricPeriod.HOUR, hourTimestamp)
-  log.info('hour id {} => {}', [timestamp.toString(), hourTimestamp.toString()])
   let metric = AggregateMetric.load(id)
 
   if (metric != null) {

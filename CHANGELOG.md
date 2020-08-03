@@ -2,6 +2,43 @@
 
 ## Next
 
+Features:
+
+- Added support for mStable EARN
+
+Schema changes:
+
+- New entities:
+
+```
+RewardsDistributor
+StakingBalance
+StakingReward
+StakingRewardsContract
+StakingRewardsContractClaimRewardTransaction
+StakingRewardsContractStakeTransaction
+StakingRewardsContractWithdrawTransaction
+```
+
+- Updated transaction type enum:
+
+```
+  // Renamed:
+  MINT => MASSET_MINT
+  SWAP => MASSET_SWAP
+  REDEEM => MASSET_REDEEM
+  EXIT => MASSET_REDEEM_MASSET
+  PAIDFEE => MASSET_PAID_FEE
+  SAVE => SAVINGS_CONTRACT_DEPOSIT
+  WITHDRAW => SAVINGS_CONTRACT_WITHDRAW
+
+  // New:
+  STAKING_REWARDS_CONTRACT_CLAIM_REWARD
+  STAKING_REWARDS_CONTRACT_EXIT
+  STAKING_REWARDS_CONTRACT_STAKE
+  STAKING_REWARDS_CONTRACT_WITHDRAW
+```
+
 ## Version 1.1.0
 
 _Released 25.06.20 12.11 CEST_
@@ -11,14 +48,14 @@ Features:
 - Metrics
   - Added support for metrics, with hourly and daily intervals
   - Aggregated values:
-      - Total supply
-      - Total savings
+    - Total supply
+    - Total savings
   - Volumes:
-      - Mint
-      - Deposit savings
-      - Withdraw savings
-      - Swap
-      - Redeem
+    - Mint
+    - Deposit savings
+    - Withdraw savings
+    - Swap
+    - Redeem
 
 ## Version 1.0.0
 

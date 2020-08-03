@@ -1,156 +1,266 @@
-# TODO use enum
-#enum BassetStatus {
-#  Default,
-#  Normal,
-#  BrokenBelowPeg,
-#  BrokenAbovePeg,
-#  Blacklisted,
-#  Liquidating,
-#  Liquidated,
-#  Failed
-#}
+enum TransactionType {
+  MASSET_MINT
+  MASSET_SWAP
+  MASSET_REDEEM
+  MASSET_REDEEM_MASSET
+  MASSET_PAID_FEE
+  SAVINGS_CONTRACT_DEPOSIT
+  SAVINGS_CONTRACT_WITHDRAW
+  STAKING_REWARDS_CONTRACT_CLAIM_REWARD
+  STAKING_REWARDS_CONTRACT_EXIT
+  STAKING_REWARDS_CONTRACT_STAKE
+  STAKING_REWARDS_CONTRACT_WITHDRAW
+}
 
-""" An ERC20-compatible token """
+enum AggregateMetricType {
+  TOTAL_SUPPLY
+  TOTAL_SAVINGS
+}
+
+enum TimeMetricPeriod {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  QUARTER
+  YEAR
+}
+
+enum StakingRewardsContractType {
+  STAKING_REWARDS
+  STAKING_REWARDS_WITH_PLATFORM_TOKEN
+}
+
+enum StakingRewardType {
+  REWARD
+  PLATFORM_REWARD
+}
+
+"""
+An ERC20-compatible token
+"""
 type Token @entity {
   id: ID!
 
-  """ Token address """
+  """
+  Token address
+  """
   address: Bytes!
 
-  """ Token decimals """
+  """
+  Token decimals
+  """
   decimals: Int!
 
-  """ Token name """
+  """
+  Token name
+  """
   name: String!
 
-  """ Token symbol """
+  """
+  Token symbol
+  """
   symbol: String!
 
-  """ Total supply of the token """
+  """
+  Total supply of the token
+  """
   totalSupply: BigDecimal!
 
-  """ Quantity of the token that has been minted """
+  """
+  Quantity of the token that has been minted
+  """
   totalMinted: BigDecimal!
 
-  """ Quantity of the token that has been transferred """
+  """
+  Quantity of the token that has been transferred
+  """
   totalTransferred: BigDecimal!
 
-  """ Quantity of the token that has been burned """
+  """
+  Quantity of the token that has been burned
+  """
   totalBurned: BigDecimal!
 }
 
-""" Basket Asset (e.g. DAI for the mUSD basket)  """
+"""
+Basket Asset (e.g. DAI for the mUSD basket)
+"""
 type Basset @entity {
   id: ID!
 
-  """ Basket the Basset is contained in """
+  """
+  Basket the Basset is contained in
+  """
   basket: Basket! @derivedFrom(field: "bassets")
 
-  """ Target weight of the Basset """
+  """
+  Target weight of the Basset
+  """
   maxWeight: BigInt!
 
-  """ Basset to Masset ratio for quantity conversion """
+  """
+  Basset to Masset ratio for quantity conversion
+  """
   ratio: BigInt!
 
   # TODO use enum
-  """ Status of the Basset, e.g. 'Normal' """
+  """
+  Status of the Basset, e.g. 'Normal'
+  """
   status: String!
 
-  """ An ERC20 can charge transfer fee, e.g. USDT or DGX tokens """
+  """
+  An ERC20 can charge transfer fee, e.g. USDT or DGX tokens
+  """
   isTransferFeeCharged: Boolean!
 
-  """ The underlying Token for the Basset """
+  """
+  The underlying Token for the Basset
+  """
   token: Token!
 
-  """ Amount of the Basset that is held in collateral """
+  """
+  Amount of the Basset that is held in collateral
+  """
   vaultBalance: BigDecimal!
 }
 
-""" A Basket of Bassets (e.g. for mUSD) """
+"""
+A Basket of Bassets (e.g. for mUSD)
+"""
 type Basket @entity {
   id: ID!
 
-  """ The Bassets in the Basket """
+  """
+  The Bassets in the Basket
+  """
   bassets: [Basset!]!
 
-  """ The collateralisation ratio of the Basket """
+  """
+  The collateralisation ratio of the Basket
+  """
   collateralisationRatio: BigInt!
 
-  """ Max number of Bassets that can be present in the Basket """
+  """
+  Max number of Bassets that can be present in the Basket
+  """
   maxBassets: Int!
 
-  """ Flag for whether the Basket has failed """
+  """
+  Flag for whether the Basket has failed
+  """
   undergoingRecol: Boolean!
 
-  """ Flag for whether the Basket has failed """
+  """
+  Flag for whether the Basket has failed
+  """
   failed: Boolean!
 
-  """ Masset the Basket belongs to """
+  """
+  Masset the Basket belongs to
+  """
   masset: Masset! @derivedFrom(field: "basket")
 }
 
-""" An mStable asset (e.g. mUSD) """
+"""
+An mStable asset (e.g. mUSD)
+"""
 type Masset @entity {
   id: ID!
 
   # TODO explain that this is the BasketManager
-  """ The Basket of Bassets for this Masset """
+  """
+  The Basket of Bassets for this Masset
+  """
   basket: Basket!
 
-  """ The swap fee rate """
+  """
+  The swap fee rate
+  """
   feeRate: BigInt!
 
-  """ The swap fee rate """
+  """
+  The redemption fee rate
+  """
   redemptionFeeRate: BigInt!
 
-  """ The underlying Token for this Masset """
+  """
+  The underlying Token for this Masset
+  """
   token: Token!
 
-  """ The token symbol """
+  """
+  The token symbol
+  """
   tokenSymbol: String!
 
   savingsContracts: [SavingsContract!]! @derivedFrom(field: "masset")
 }
 
-""" An Ethereum account with balances/credit balances """
+"""
+An Ethereum account with balances/credit balances
+"""
 type Account @entity {
   id: ID!
 
-  """ Address of the account """
+  """
+  Address of the account
+  """
   address: Bytes!
 
-  """ AccountBalances of the account """
+  """
+  AccountBalances of the account
+  """
   balances: [AccountBalance!]! @derivedFrom(field: "account")
 
-  """ CreditBalances of the account """
+  """
+  CreditBalances of the account
+  """
   creditBalances: [CreditBalance!]! @derivedFrom(field: "account")
 }
 
-""" An account balance for a given token """
+"""
+An account balance for a given token
+"""
 type AccountBalance @entity {
   id: ID!
 
-  """ Account """
+  """
+  Account
+  """
   account: Account!
 
-  """ Amount as a decimal value """
+  """
+  Amount as a decimal value
+  """
   amount: BigDecimal!
 
-  """ Token """
+  """
+  Token
+  """
   token: Token!
 }
 
-""" A credit balance for a given savings contract """
+"""
+A credit balance for a given savings contract
+"""
 type CreditBalance @entity {
   id: ID!
 
-  """ Account """
+  """
+  Account
+  """
   account: Account!
 
-  """ Amount as a decimal value """
+  """
+  Amount as a decimal value
+  """
   amount: BigDecimal!
 
-  """ Savings contract """
+  """
+  Savings contract
+  """
   savingsContract: SavingsContract!
 }
 
@@ -181,30 +291,6 @@ type ExchangeRate @entity {
   timestamp: Int!
 
   savingsContract: SavingsContract!
-}
-
-enum TransactionType {
-  MINT,
-  SWAP,
-  REDEEM,
-  EXIT,
-  PAIDFEE,
-  SAVE,
-  WITHDRAW
-}
-
-enum AggregateMetricType {
-  TOTAL_SUPPLY,
-  TOTAL_SAVINGS,
-}
-
-enum TimeMetricPeriod {
-  HOUR,
-  DAY,
-  WEEK,
-  MONTH,
-  QUARTER,
-  YEAR,
 }
 
 interface TimeMetric {
@@ -241,18 +327,15 @@ type AggregateMetric implements TimeMetric @entity {
   type: AggregateMetricType!
 }
 
-""" A common transaction type """
+"""
+A common transaction type
+"""
 interface Transaction {
   id: ID!
 
   tx: Bytes!
 
   type: TransactionType!
-
-  """ Which mAsset is this tx in? """
-  mAsset: Masset!
-
-  mAssetUnits: BigDecimal!
 
   timestamp: Int!
 
@@ -264,23 +347,26 @@ interface Transaction {
 #   recipient: Bytes!
 # }
 
-""" A bAsset<>bAsset swap """
+"""
+A bAsset<>bAsset swap
+"""
 type SwapTransaction implements Transaction @entity {
-
   id: ID!
 
   tx: Bytes!
 
   type: TransactionType!
 
-  """ Which mAsset is this tx in? """
-  mAsset: Masset!
-
-  mAssetUnits: BigDecimal!
+  sender: Bytes!
 
   timestamp: Int!
 
-  sender: Bytes!
+  """
+  Which mAsset is this tx in?
+  """
+  mAsset: Masset!
+
+  mAssetUnits: BigDecimal!
 
   inputBasset: Basset!
 
@@ -299,23 +385,250 @@ type SwapTransaction implements Transaction @entity {
 #   recipient: Bytes!
 # }
 
-""" Log of the Fee payment """
+"""
+Log of the Fee payment
+"""
 type FeePaidTransaction implements Transaction @entity {
-
   id: ID!
 
   tx: Bytes!
 
   type: TransactionType!
 
-  """ Which mAsset is this tx in? """
-  mAsset: Masset!
-
-  mAssetUnits: BigDecimal!
-
   timestamp: Int!
 
   sender: Bytes!
 
+  """
+  Which mAsset is this tx in?
+  """
+  mAsset: Masset!
+
+  mAssetUnits: BigDecimal!
+
   asset: Basset!
+}
+
+type StakingRewardsContractTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+}
+
+type StakingRewardsContractClaimRewardTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+
+  amount: BigInt!
+}
+
+type StakingRewardsContractStakeTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+
+  amount: BigInt!
+}
+
+type StakingRewardsContractWithdrawTransaction implements Transaction @entity {
+  id: ID!
+
+  tx: Bytes!
+
+  type: TransactionType!
+
+  sender: Bytes!
+
+  timestamp: Int!
+
+  stakingRewardsContract: StakingRewardsContract!
+
+  amount: BigInt!
+}
+
+type RewardsDistributor @entity {
+  """
+  ID of the rewards distributor contract
+  """
+  id: ID!
+
+  """
+  Whitelisted fund managers
+  """
+  fundManagers: [Bytes!]!
+}
+
+
+type StakingReward @entity {
+  # contract + account
+  id: ID!
+
+  """
+  Reward amount
+  """
+  amount: BigInt!
+
+  """
+  The reward amount per token paid
+  """
+  amountPerTokenPaid: BigInt!
+
+  """
+  The staking rewards contract this reward is kept on
+  """
+  stakingRewardsContract: StakingRewardsContract!
+
+  """
+  The account the reward belongs to
+  """
+  account: Bytes!
+
+  """
+  The type of staking reward, e.g. "REWARD" or "PLATFORM_REWARD"
+  """
+  type: StakingRewardType!
+}
+
+type StakingRewardsContract @entity {
+  """
+  ID of the staking rewards contract
+  """
+  id: ID!
+
+  """
+  The type of staking rewards contract, e.g. `STAKING_REWARDS` or `STAKING_REWARDS_WITH_PLATFORM_TOKEN`
+  """
+  type: StakingRewardsContractType!
+
+  """
+  Duration
+  """
+  duration: Int!
+
+  """
+  Period finish
+  """
+  periodFinish: Int!
+
+  """
+  Last update time
+  """
+  lastUpdateTime: Int!
+
+  """
+  Staking token
+  """
+  stakingToken: Token!
+
+  """
+  Reward per token stored
+  """
+  rewardPerTokenStored: BigInt!
+
+  """
+  Reward rate
+  """
+  rewardRate: BigInt!
+
+  """
+  Rewards token
+  """
+  rewardsToken: Token!
+
+  """
+  Rewards distributor
+  """
+  rewardsDistributor: RewardsDistributor!
+
+  """
+  Total supply
+  """
+  totalSupply: BigInt!
+
+  """
+  Total staking rewards
+  """
+  totalStakingRewards: BigInt!
+
+  """
+  Accessor for staking balances kept on this contract
+  """
+  stakingBalances: [StakingBalance!]!
+    @derivedFrom(field: "stakingRewardsContract")
+
+  """
+  Accessor for staking rewards kept on this contract
+  """
+  stakingRewards: [StakingReward!]!
+    @derivedFrom(field: "stakingRewardsContract")
+
+  #######################################################
+  # For type `STAKING_REWARDS_WITH_PLATFORM_TOKEN` only #
+
+  """
+  Platform token
+  """
+  platformToken: Token
+
+  """
+  Platform reward rate
+  """
+  platformRewardRate: BigInt
+
+  """
+  Platform reward per token stored
+  """
+  platformRewardPerTokenStored: BigInt
+
+  """
+  Total platform rewards
+  """
+  totalPlatformRewards: BigInt
+
+  #######################################################
+}
+
+type StakingBalance @entity {
+  # stakingRewardsContract + account
+  id: ID!
+
+  """
+  Account this staking balance belongs to
+  """
+  account: Bytes!
+
+  """
+  Staking rewards contract this staking balance is kept on
+  """
+  stakingRewardsContract: StakingRewardsContract!
+
+  """
+  Staking balance amount
+  """
+  amount: BigInt!
 }

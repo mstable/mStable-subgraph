@@ -33,7 +33,9 @@ function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
   updateBassets(event.address)
 }
 
-function handleRedeemedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
+function handleRedeemedEvent<TEvent extends EthereumEvent>(
+  event: TEvent,
+): void {
   // A `Transfer` event should also have been emitted; the handler for that
   // event will adjust the Masset token balance and total supply.
   // Basset token events are not tracked.
@@ -46,7 +48,7 @@ export function handleMinted(event: Minted): void {
   handleMintedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.MINT,
+    TransactionType.MASSET_MINT,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -56,7 +58,7 @@ export function handleMintedMulti(event: MintedMulti): void {
   handleMintedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.MINT,
+    TransactionType.MASSET_MINT,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -68,10 +70,12 @@ export function handleSwapped(event: Swapped): void {
   updateBassets(event.address)
 
   let outputBasset = Basset.load(event.params.output.toHexString())
-  let ratioedOutputAmount = event.params.outputAmount.times(outputBasset.ratio).div(RATIO)
+  let ratioedOutputAmount = event.params.outputAmount
+    .times(outputBasset.ratio)
+    .div(RATIO)
 
   appendVolumeMetrics(
-    TransactionType.SWAP,
+    TransactionType.MASSET_SWAP,
     toDecimal(ratioedOutputAmount, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -81,7 +85,7 @@ export function handleRedeemed(event: Redeemed): void {
   handleRedeemedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.REDEEM,
+    TransactionType.MASSET_REDEEM,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )
@@ -91,7 +95,7 @@ export function handleRedeemedMasset(event: RedeemedMasset): void {
   handleRedeemedEvent(event)
 
   appendVolumeMetrics(
-    TransactionType.REDEEM,
+    TransactionType.MASSET_REDEEM_MASSET,
     toDecimal(event.params.mAssetQuantity, MASSET_DECIMALS),
     event.block.timestamp,
   )

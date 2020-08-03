@@ -64,7 +64,10 @@ export function decreaseSavingsContractTotalCredits(
   savingsContract.save()
 }
 
-export function updateSavingsContractSavingsRate(address: Address, amount: BigInt): void {
+export function updateSavingsContractSavingsRate(
+  address: Address,
+  amount: BigInt,
+): void {
   let savingsContract = getOrCreateSavingsContract(address)
 
   savingsContract.savingsRate = toDecimal(amount, SAVINGS_RATE_DECIMALS)
@@ -72,7 +75,9 @@ export function updateSavingsContractSavingsRate(address: Address, amount: BigIn
   savingsContract.save()
 }
 
-export function updateSavingsContractTotalSavings(address: Address): BigDecimal {
+export function updateSavingsContractTotalSavings(
+  address: Address,
+): BigDecimal {
   let savingsContract = getOrCreateSavingsContract(address)
   let instance = SavingsContractTemplate.bind(address)
   let totalSavings = instance.totalSavings()

@@ -51,6 +51,27 @@ dataSources:
           handler: handleTransfer
 
   - kind: ethereum/contract
+    name: MTA
+    network: '{{network}}'
+    source:
+      abi: ERC20Detailed
+      address: '{{address_MTA}}'
+      startBlock: {{startBlock_MTA}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/Token.ts
+      entities:
+        - Token
+      abis:
+        - name: ERC20Detailed
+          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTokenTransfer
+
+  - kind: ethereum/contract
     name: SavingsManager
     network: '{{network}}'
     source:
@@ -82,12 +103,6 @@ dataSources:
           handler: handleSavingsContractAdded
         - event: SavingsRateChanged(uint256)
           handler: handleSavingsRateChanged
-        - event: InterestCollected(indexed address,uint256,uint256,uint256)
-          handler: handleInterestCollected
-        - event: InterestDistributed(indexed address,uint256)
-          handler: handleInterestDistributed
-        - event: InterestWithdrawnByGovernor(indexed address,address,uint256)
-          handler: handleInterestWithdrawnByGovernor
 
   - kind: ethereum/contract
     name: BasketManager
@@ -125,6 +140,40 @@ dataSources:
         - event: BasketStatusChanged()
           handler: handleBasketStatusChanged
 
+  - kind: ethereum/contract
+    name: RewardsDistributor
+    network: '{{network}}'
+    source:
+      abi: RewardsDistributor
+      address: '{{address_RewardsDistributor}}'
+      startBlock: {{startBlock_RewardsDistributor}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/RewardsDistributor.ts
+      entities:
+        - RewardsDistributor
+        - Account
+        - StakingRewards
+        - StakingRewardsWithPlatformToken
+      abis:
+        - name: RewardsDistributor
+          file: ./lib/mStable-contracts/build/contracts/RewardsDistributor.json
+        - name: StakingRewards
+          file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
+        - name: StakingRewardsWithPlatformToken
+          file: ./lib/mStable-contracts/build/contracts/StakingRewardsWithPlatformToken.json
+        - name: ERC20Detailed
+          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+      eventHandlers:
+        - event: RemovedFundManager(indexed address)
+          handler: handleRemovedFundManager
+        - event: Whitelisted(indexed address)
+          handler: handleWhitelisted
+        - event: DistributedReward(address,address,address,uint256)
+          handler: handleDistributedReward
+
 templates:
   - kind: ethereum/contract
     name: SavingsContract
@@ -150,3 +199,55 @@ templates:
           handler: handleSavingsDeposited
         - event: CreditsRedeemed(indexed address,uint256,uint256)
           handler: handleCreditsRedeemed
+
+  - kind: ethereum/contract
+    name: StakingRewards
+    network: '{{network}}'
+    source:
+      abi: StakingRewards
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/StakingRewards/StakingRewards.ts
+      entities:
+        - StakingRewardsContract
+      abis:
+        - name: StakingRewards
+          file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
+      eventHandlers:
+        - event: RewardAdded(uint256)
+          handler: handleRewardAdded
+        - event: Staked(indexed address,uint256,address)
+          handler: handleStaked
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawn
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaid
+
+  - kind: ethereum/contract
+    name: StakingRewardsWithPlatformToken
+    network: '{{network}}'
+    source:
+      abi: StakingRewardsWithPlatformToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/StakingRewards/StakingRewardsWithPlatformToken.ts
+      entities:
+        - StakingRewardsContract
+      abis:
+        - name: StakingRewards
+          file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
+        - name: StakingRewardsWithPlatformToken
+          file: ./lib/mStable-contracts/build/contracts/StakingRewardsWithPlatformToken.json
+      eventHandlers:
+        - event: RewardAdded(uint256,uint256)
+          handler: handleRewardAdded
+        - event: Staked(indexed address,uint256,address)
+          handler: handleStaked
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawn
+        - event: RewardPaid(indexed address,uint256,uint256)
+          handler: handleRewardPaid

@@ -3,10 +3,8 @@ import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 export let ZERO = BigInt.fromI32(0)
 export let RATIO = BigInt.fromI32(100000000)
 
-// @ts-ignore
 export function toDecimal(value: BigInt, decimals: u32): BigDecimal {
   let precision = BigInt.fromI32(10)
-    // @ts-ignore
     .pow(<u8>decimals)
     .toBigDecimal()
 
