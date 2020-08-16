@@ -25,28 +25,16 @@ export function handleRewardAdded(event: RewardAdded): void {
 }
 
 export function handleStaked(event: Staked): void {
-  handleStakedForType(
-    event.address,
-    StakingRewardsContractType.STAKING_REWARDS,
-    event.params.user,
-  )
+  handleStakedForType(event, StakingRewardsContractType.STAKING_REWARDS)
   getOrCreateStakingRewardsContractStakeTransaction(event)
 }
 
 export function handleWithdrawn(event: Withdrawn): void {
-  handleWithdrawnForType(
-    event.address,
-    StakingRewardsContractType.STAKING_REWARDS,
-    event.params.user,
-  )
+  handleWithdrawnForType(event, StakingRewardsContractType.STAKING_REWARDS)
   getOrCreateStakingRewardsContractWithdrawTransaction(event)
 }
 
 export function handleRewardPaid(event: RewardPaid): void {
-  handleRewardPaidForType(
-    event.address,
-    StakingRewardsContractType.STAKING_REWARDS,
-    event.params.user,
-  )
+  handleRewardPaidForType(event, StakingRewardsContractType.STAKING_REWARDS)
   getOrCreateStakingRewardsContractRewardPaidTransaction(event)
 }

@@ -423,7 +423,8 @@ type StakingRewardsContractTransaction implements Transaction @entity {
   stakingRewardsContract: StakingRewardsContract!
 }
 
-type StakingRewardsContractClaimRewardTransaction implements Transaction @entity {
+type StakingRewardsContractClaimRewardTransaction implements Transaction
+  @entity {
   id: ID!
 
   tx: Bytes!
@@ -482,7 +483,6 @@ type RewardsDistributor @entity {
   """
   fundManagers: [Bytes!]!
 }
-
 
 type StakingReward @entity {
   # contract + account
@@ -585,6 +585,24 @@ type StakingRewardsContract @entity {
   Accessor for staking rewards kept on this contract
   """
   stakingRewards: [StakingReward!]!
+    @derivedFrom(field: "stakingRewardsContract")
+
+  """
+  Accessor for claim reward transactions sent to this contract
+  """
+  claimRewardTransactions: [StakingRewardsContractClaimRewardTransaction!]!
+    @derivedFrom(field: "stakingRewardsContract")
+
+  """
+  Accessor for stake transactions sent to this contract
+  """
+  stakeTransactions: [StakingRewardsContractStakeTransaction!]!
+    @derivedFrom(field: "stakingRewardsContract")
+
+  """
+  Accessor for withdraw transactions sent to this contract
+  """
+  withdrawTransactions: [StakingRewardsContractWithdrawTransaction!]!
     @derivedFrom(field: "stakingRewardsContract")
 
   #######################################################

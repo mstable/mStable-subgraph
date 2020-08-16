@@ -4,13 +4,23 @@ import {
   Staked,
   Withdrawn,
 } from '../../../generated/templates/StakingRewardsWithPlatformToken/StakingRewardsWithPlatformToken'
+import {
+  RewardPaid as RewardPaidBase,
+  Staked as StakedBase,
+  Withdrawn as WithdrawnBase,
+} from '../../../generated/templates/StakingRewards/StakingRewards'
 import { StakingRewardsContractType } from '../../enums'
 import {
   handleRewardAddedForType,
-  handleStakedForType,
   handleRewardPaidForType,
+  handleStakedForType,
   handleWithdrawnForType,
 } from './shared'
+import {
+  getOrCreateStakingRewardsContractRewardPaidTransaction,
+  getOrCreateStakingRewardsContractStakeTransaction,
+  getOrCreateStakingRewardsContractWithdrawTransaction,
+} from '../../models/Transaction'
 
 export function handleRewardAdded(event: RewardAdded): void {
   handleRewardAddedForType(
@@ -21,24 +31,26 @@ export function handleRewardAdded(event: RewardAdded): void {
 
 export function handleStaked(event: Staked): void {
   handleStakedForType(
-    event.address,
+    event as StakedBase,
     StakingRewardsContractType.STAKING_REWARDS_WITH_PLATFORM_TOKEN,
-    event.params.user,
   )
+  getOrCreateStakingRewardsContractStakeTransaction(event as StakedBase)
 }
 
 export function handleWithdrawn(event: Withdrawn): void {
   handleWithdrawnForType(
-    event.address,
+    event as WithdrawnBase,
     StakingRewardsContractType.STAKING_REWARDS_WITH_PLATFORM_TOKEN,
-    event.params.user,
   )
+  getOrCreateStakingRewardsContractWithdrawTransaction(event as WithdrawnBase)
 }
 
 export function handleRewardPaid(event: RewardPaid): void {
   handleRewardPaidForType(
-    event.address,
+    event as RewardPaidBase,
     StakingRewardsContractType.STAKING_REWARDS_WITH_PLATFORM_TOKEN,
-    event.params.user,
+  )
+  getOrCreateStakingRewardsContractRewardPaidTransaction(
+    event as RewardPaidBase,
   )
 }

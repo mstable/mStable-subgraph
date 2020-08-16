@@ -7,9 +7,17 @@ import {
   getTotalRewards,
   isWithPlatformToken,
 } from '../../models/StakingRewardsContract'
-import { StakingRewards } from '../../../generated/templates/StakingRewards/StakingRewards'
+import {
+  RewardPaid,
+  Staked,
+  StakingRewards,
+  Withdrawn,
+} from '../../../generated/templates/StakingRewards/StakingRewards'
 import { StakingRewardsWithPlatformToken } from '../../../generated/templates/StakingRewardsWithPlatformToken/StakingRewardsWithPlatformToken'
-import { getOrCreateStakingBalance } from '../../models/StakingBalance'
+import {
+  decreaseStakingBalance,
+  increaseStakingBalance,
+} from '../../models/StakingBalance'
 
 function updateStakingRewards(
   contractAddress: Address,
@@ -78,29 +86,13 @@ function updateUserRewards(
   }
 }
 
-function updateUserStakingBalance(
-  contractAddress: Address,
-  type: StakingRewardsContractType,
-  user: Address,
-): void {
-  let contract = StakingRewards.bind(contractAddress)
-
-  let amount = contract.balanceOf(user)
-
-  let stakingBalance = getOrCreateStakingBalance(user, contractAddress)
-
-  stakingBalance.amount = amount
-  stakingBalance.save()
-}
-
 export function handleStakedForType(
-  contractAddress: Address,
+  event: Staked,
   type: StakingRewardsContractType,
-  user: Address,
 ): void {
-  updateStakingRewards(contractAddress, type)
-  updateUserRewards(contractAddress, type, user)
-  updateUserStakingBalance(contractAddress, type, user)
+  updateStakingRewards(event.address, type)
+  updateUserRewards(event.address, type, event.params.user)
+  increaseStakingBalance(event.address, event.params.user, event.params.amount)
 }
 
 export function handleRewardAddedForType(
@@ -111,21 +103,18 @@ export function handleRewardAddedForType(
 }
 
 export function handleWithdrawnForType(
-  contractAddress: Address,
+  event: Withdrawn,
   type: StakingRewardsContractType,
-  user: Address,
 ): void {
-  updateStakingRewards(contractAddress, type)
-  updateUserRewards(contractAddress, type, user)
-  updateUserStakingBalance(contractAddress, type, user)
+  updateStakingRewards(event.address, type)
+  updateUserRewards(event.address, type, event.params.user)
+  decreaseStakingBalance(event.address, event.params.user, event.params.amount)
 }
 
 export function handleRewardPaidForType(
-  contractAddress: Address,
+  event: RewardPaid,
   type: StakingRewardsContractType,
-  user: Address,
 ): void {
-  updateStakingRewards(contractAddress, type)
-  updateUserRewards(contractAddress, type, user)
-  updateUserStakingBalance(contractAddress, type, user)
+  updateStakingRewards(event.address, type)
+  updateUserRewards(event.address, type, event.params.user)
 }
