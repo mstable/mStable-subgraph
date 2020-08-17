@@ -97,7 +97,7 @@ export function getOrCreateStakingRewardsContractWithdrawTransaction(
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.type = type
   transaction.amount = event.params.amount
-  transaction.stakingRewardsContract = event.transaction.to.toHexString()
+  transaction.stakingRewardsContract = event.address.toHexString()
   transaction.save()
 
   return transaction
@@ -126,7 +126,7 @@ export function getOrCreateStakingRewardsContractRewardPaidTransaction(
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.type = type
   transaction.amount = event.params.reward
-  transaction.stakingRewardsContract = event.transaction.to.toHexString()
+  transaction.stakingRewardsContract = event.address.toHexString()
   transaction.save()
 
   return transaction
@@ -153,7 +153,7 @@ export function getOrCreateStakingRewardsContractStakeTransaction(
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.type = type
   transaction.amount = event.params.amount
-  transaction.stakingRewardsContract = event.transaction.to.toHexString()
+  transaction.stakingRewardsContract = event.address.toHexString()
   transaction.save()
 
   return transaction
