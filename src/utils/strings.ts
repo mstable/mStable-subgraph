@@ -1,7 +1,7 @@
-import { ByteArray, crypto, EthereumEvent } from '@graphprotocol/graph-ts'
+import { ByteArray, crypto, ethereum } from '@graphprotocol/graph-ts'
 import { concat } from '@graphprotocol/graph-ts/helper-functions'
 
-export function getEventId(event: EthereumEvent): string {
+export function getEventId(event: ethereum.Event): string {
   return crypto
     .keccak256(
       concat(

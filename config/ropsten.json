@@ -9,5 +9,7 @@
   "address_RewardsDistributor": "0x683eB4a6Ddd554A0dB1837E3981be6FFd2C8F333",
   "startBlock_RewardsDistributor": 8200000,
   "address_MTA": "0x273bc479E5C21CAA15aA8538DecBF310981d14C0",
-  "startBlock_MTA": 8200000
+  "startBlock_MTA": 8200000,
+  "address_MerkleDrop_BAL": "0x5699a17F5169645ad55c71cA64978b4acc60199D",
+  "startBlock_MerkleDrop_BAL": 8200000
 }
