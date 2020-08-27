@@ -93,7 +93,7 @@ export function getOrCreateStakingRewardsContractWithdrawTransaction(
   let transaction = new StakingRewardsContractWithdrawTransaction(id)
 
   transaction.tx = txHash
-  transaction.sender = event.transaction.from
+  transaction.sender = event.params.user
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.type = type
   transaction.amount = event.params.amount
@@ -122,7 +122,7 @@ export function getOrCreateStakingRewardsContractRewardPaidTransaction(
   let transaction = new StakingRewardsContractClaimRewardTransaction(id)
 
   transaction.tx = txHash
-  transaction.sender = event.transaction.from
+  transaction.sender = event.params.user
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.type = type
   transaction.amount = event.params.reward
@@ -149,7 +149,7 @@ export function getOrCreateStakingRewardsContractStakeTransaction(
   let transaction = new StakingRewardsContractStakeTransaction(id)
 
   transaction.tx = txHash
-  transaction.sender = event.transaction.from
+  transaction.sender = event.params.user
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.type = type
   transaction.amount = event.params.amount
