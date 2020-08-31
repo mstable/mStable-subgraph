@@ -3,6 +3,18 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
+const { argv } = require('yargs').options({
+  input: {
+    type: 'array',
+    demandOption: true,
+    describe: 'Input contract path(s)',
+  },
+  output: {
+    type: 'string',
+    demandOption: true,
+    describe: 'Output path for ABIs',
+  },
+})
 
 const filterFields = (entryName, fields) => {
   return fields.filter(({ name, type, internalType }) => {
@@ -31,37 +43,41 @@ const filterAbi = (abi) => {
 }
 
 /**
- * Copy ABIs and filter out types not handled by The Graph:
+ * Copy ABIs into one location and filter out types not handled by The Graph:
  * https://github.com/graphprotocol/graph-cli/issues/342
  */
 const main = async () => {
-  const INPUT_DIR = './lib/mStable-contracts/build/contracts/'
-  const OUTPUT_DIR = './abis/'
-
-  const paths = (
-    await fs.promises.readdir(INPUT_DIR, {
-      withFileTypes: true,
-    })
-  ).filter(({ name }) => {
-    return name.endsWith('json')
-  })
-
-  const files = await Promise.all(
-    paths.map(({ name }) => {
-      return fs.promises.readFile(path.join(INPUT_DIR, name))
-    }),
-  )
-
-  const fileContents = files.map((buffer) => {
-    const { contractName, abi } = JSON.parse(buffer)
-    const filteredAbi = filterAbi(abi)
-    return JSON.stringify({ contractName, abi: filteredAbi }, null, 2)
-  })
-
+  const { input, output } = argv
   await Promise.all(
-    paths.map(({ name }, index) => {
-      const contents = fileContents[index]
-      return fs.promises.writeFile(path.join(OUTPUT_DIR, name), contents)
+    input.flatMap(async (inputPath) => {
+      const allFilePaths = await fs.promises.readdir(inputPath, {
+        withFileTypes: true,
+      })
+
+      const jsonFilePaths = allFilePaths.filter(({ name }) => {
+        return name.endsWith('json')
+      })
+
+      const jsonFiles = await Promise.all(
+        jsonFilePaths.map(({ name }) => {
+          return fs.promises.readFile(path.join(inputPath, name))
+        }),
+      )
+
+      const abis = await Promise.all(
+        jsonFiles.map((buffer) => {
+          const { contractName, abi } = JSON.parse(buffer)
+          const filteredAbi = filterAbi(abi)
+          return JSON.stringify({ contractName, abi: filteredAbi }, null, 2)
+        }),
+      )
+
+      return Promise.all(
+        jsonFilePaths.map(({ name }, index) => {
+          const contents = abis[index]
+          return fs.promises.writeFile(path.join(output, name), contents)
+        }),
+      )
     }),
   )
 }
