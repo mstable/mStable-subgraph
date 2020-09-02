@@ -25,11 +25,11 @@ dataSources:
         - Token
       abis:
         - name: Masset
-          file: ./lib/mStable-contracts/build/contracts/Masset.json
+          file: ./abis/Masset.json
         - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+          file: ./abis/ERC20Detailed.json
         - name: BasketManager
-          file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+          file: ./abis/BasketManager.json
       eventHandlers:
         - event: Minted(indexed address,address,uint256,address,uint256)
           handler: handleMinted
@@ -66,7 +66,7 @@ dataSources:
         - Token
       abis:
         - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+          file: ./abis/ERC20Detailed.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTokenTransfer
@@ -91,13 +91,13 @@ dataSources:
         - Masset
       abis:
         - name: SavingsManager
-          file: ./lib/mStable-contracts/build/contracts/SavingsManager.json
+          file: ./abis/SavingsManager.json
         - name: Masset
-          file: ./lib/mStable-contracts/build/contracts/Masset.json
+          file: ./abis/Masset.json
         - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+          file: ./abis/ERC20Detailed.json
         - name: BasketManager
-          file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+          file: ./abis/BasketManager.json
       eventHandlers:
         - event: SavingsContractAdded(indexed address,address)
           handler: handleSavingsContractAdded
@@ -123,11 +123,11 @@ dataSources:
         - Token
       abis:
         - name: BasketManager
-          file: ./lib/mStable-contracts/build/contracts/BasketManager.json
+          file: ./abis/BasketManager.json
         - name: Masset
-          file: ./lib/mStable-contracts/build/contracts/Masset.json
+          file: ./abis/Masset.json
         - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+          file: ./abis/ERC20Detailed.json
       eventHandlers:
         - event: BassetAdded(indexed address,address)
           handler: handleBassetAdded
@@ -159,13 +159,13 @@ dataSources:
         - StakingRewardsWithPlatformToken
       abis:
         - name: RewardsDistributor
-          file: ./lib/mStable-contracts/build/contracts/RewardsDistributor.json
+          file: ./abis/RewardsDistributor.json
         - name: StakingRewards
-          file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
+          file: ./abis/StakingRewards.json
         - name: StakingRewardsWithPlatformToken
-          file: ./lib/mStable-contracts/build/contracts/StakingRewardsWithPlatformToken.json
+          file: ./abis/StakingRewardsWithPlatformToken.json
         - name: ERC20Detailed
-          file: ./lib/mStable-contracts/build/contracts/ERC20Detailed.json
+          file: ./abis/ERC20Detailed.json
       eventHandlers:
         - event: RemovedFundManager(indexed address)
           handler: handleRemovedFundManager
@@ -173,6 +173,39 @@ dataSources:
           handler: handleWhitelisted
         - event: DistributedReward(address,address,address,uint256)
           handler: handleDistributedReward
+
+  # This could also be a template, if there were an event to listen to
+  # to create the contracts
+  - kind: ethereum/contract
+    name: MerkleDrop
+    network: '{{network}}'
+    source:
+      abi: MerkleDrop
+      address: '{{address_MerkleDrop_BAL}}'
+      startBlock: {{startBlock_MerkleDrop_BAL}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/MerkleDrop.ts
+      entities:
+        - MerkleDrop
+        - MerkleDropClaim
+        - MerkleDropTranche
+      abis:
+        - name: MerkleDrop
+          file: ./abis/MerkleDrop.json
+      eventHandlers:
+        - event: Claimed(address,uint256,uint256)
+          handler: handleClaimed
+        - event: TrancheAdded(uint256,bytes32,uint256)
+          handler: handleTrancheAdded
+        - event: TrancheExpired(uint256)
+          handler: handleTrancheExpired
+        - event: RemovedFunder(indexed address)
+          handler: handleRemovedFunder
+        - event: Whitelisted(indexed address)
+          handler: handleWhitelisted
 
 templates:
   - kind: ethereum/contract
@@ -189,7 +222,7 @@ templates:
         - Token
       abis:
         - name: SavingsContract
-          file: ./lib/mStable-contracts/build/contracts/SavingsContract.json
+          file: ./abis/SavingsContract.json
       eventHandlers:
         - event: AutomaticInterestCollectionSwitched(bool)
           handler: handleAutomaticInterestCollectionSwitched
@@ -214,7 +247,7 @@ templates:
         - StakingRewardsContract
       abis:
         - name: StakingRewards
-          file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
+          file: ./abis/StakingRewards.json
       eventHandlers:
         - event: RewardAdded(uint256)
           handler: handleRewardAdded
@@ -239,9 +272,9 @@ templates:
         - StakingRewardsContract
       abis:
         - name: StakingRewards
-          file: ./lib/mStable-contracts/build/contracts/StakingRewards.json
+          file: ./abis/StakingRewards.json
         - name: StakingRewardsWithPlatformToken
-          file: ./lib/mStable-contracts/build/contracts/StakingRewardsWithPlatformToken.json
+          file: ./abis/StakingRewardsWithPlatformToken.json
       eventHandlers:
         - event: RewardAdded(uint256,uint256)
           handler: handleRewardAdded

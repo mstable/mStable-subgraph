@@ -4,20 +4,40 @@
 
 Features:
 
+- Added support for Merkle drops (for distributing rewards)
+
+Schema changes:
+
+- New entities:
+
+```graphql
+type MerkleDropClaim {}
+type MerkleDropTranche {}
+type MerkleDrop {}
+```
+
+Miscellaneous:
+
+- Updated `graph-cli` and `graph-ts` to latest versions
+
+## Version 1.2.0
+
+Features:
+
 - Added support for mStable EARN
 
 Schema changes:
 
 - New entities:
 
-```
-RewardsDistributor
-StakingBalance
-StakingReward
-StakingRewardsContract
-StakingRewardsContractClaimRewardTransaction
-StakingRewardsContractStakeTransaction
-StakingRewardsContractWithdrawTransaction
+```graphql
+type RewardsDistributor {}
+type StakingBalance {}
+type StakingReward {}
+type StakingRewardsContract {}
+type StakingRewardsContractClaimRewardTransaction {}
+type StakingRewardsContractStakeTransaction {}
+type StakingRewardsContractWithdrawTransaction {}
 ```
 
 - Updated transaction type enum:

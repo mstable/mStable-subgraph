@@ -650,3 +650,43 @@ type StakingBalance @entity {
   """
   amount: BigInt!
 }
+
+type MerkleDropClaim @entity {
+  id: ID!
+
+  account: Bytes!
+
+  merkleDrop: MerkleDrop!
+
+  tranche: MerkleDropTranche!
+
+  balance: BigInt!
+}
+
+type MerkleDropTranche @entity {
+  id: ID!
+
+  merkleDrop: MerkleDrop!
+
+  expired: Boolean!
+
+  trancheNumber: Int!
+
+  merkleRoot: Bytes!
+
+  totalAmount: BigInt!
+
+  claims: [MerkleDropClaim!]! @derivedFrom(field: "tranche")
+}
+
+type MerkleDrop @entity {
+  id: ID!
+
+  token: Token!
+
+  claims: [MerkleDropClaim!]! @derivedFrom(field: "merkleDrop")
+
+  tranches: [MerkleDropTranche!]! @derivedFrom(field: "merkleDrop")
+
+  funders: [Bytes!]!
+}

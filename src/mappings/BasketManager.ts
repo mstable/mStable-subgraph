@@ -1,4 +1,4 @@
-import { EthereumEvent } from '@graphprotocol/graph-ts'
+import { ethereum } from '@graphprotocol/graph-ts'
 import {
   BasketManager,
   BasketWeightsUpdated,
@@ -8,7 +8,7 @@ import {
 } from '../../generated/BasketManager/BasketManager'
 import { upsertBasket } from '../models/Basket'
 
-function updateBasketForBasketManagerEvent<TEvent extends EthereumEvent>(
+function updateBasketForBasketManagerEvent<TEvent extends ethereum.Event>(
   event: TEvent,
 ): void {
   let basketManagerContract = BasketManager.bind(event.address)

@@ -1,11 +1,8 @@
 {
   "name": "mstable-graph",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
-    "provision": "sh ./scripts/provision.sh",
-    "truffle:migrate": "cd lib/mStable-contracts && yarn migrate",
-    "truffle:script": "cd lib/mStable-contracts && yarn script",
-    "codegen": "yarn graph codegen",
+    "codegen": "node ./scripts/codegen-prepare.js --input=./node_modules/@mstable/protocol/build/contracts/ --output=./abis && yarn graph codegen",
     "build": "yarn graph build",
     "prepare:local": "mustache config/development.json subgraph.template.yaml > subgraph.yaml",
     "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
@@ -19,10 +16,12 @@
     "deploy:mainnet": "yarn graph deploy mStable/mStable-protocol --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token "
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "https://github.com/JamesLefrere/graph-cli.git#fix-tuple-arrays-for-0.17.1",
-    "@graphprotocol/graph-ts": "^0.17.0",
+    "@graphprotocol/graph-cli": "^0.18.0",
+    "@graphprotocol/graph-ts": "^0.18.1",
+    "@mstable/protocol": "^1.1.4",
     "@typescript-eslint/eslint-plugin": "^3.5.0",
     "@typescript-eslint/parser": "^3.5.0",
+    "chalk": "^4.1.0",
     "eslint": "^7.3.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -30,7 +29,8 @@
     "lint-staged": "^10.0.7",
     "mustache": "^4.0.1",
     "prettier": "^2.0.5",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "yargs": "^15.4.1"
   },
   "husky": {
     "hooks": {
