@@ -1,4 +1,4 @@
-import { ethereum } from '@graphprotocol/graph-ts'
+import { EthereumEvent } from '@graphprotocol/graph-ts'
 import {
   Minted,
   MintedMulti,
@@ -27,7 +27,7 @@ import { MASSET_DECIMALS } from '../utils/token'
 import { Basset } from '../../generated/schema'
 import { getOrCreateToken } from '../models/Token'
 
-function handleMintedEvent<TEvent extends ethereum.Event>(event: TEvent): void {
+function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
   // A `Transfer` event should have been emitted; the handler for that
   // event will adjust the Masset token balance and total supply.
   // Basset token events are not tracked.
@@ -36,7 +36,7 @@ function handleMintedEvent<TEvent extends ethereum.Event>(event: TEvent): void {
   updateBassets(event.address)
 }
 
-function handleRedeemedEvent<TEvent extends ethereum.Event>(
+function handleRedeemedEvent<TEvent extends EthereumEvent>(
   event: TEvent,
 ): void {
   // A `Transfer` event should also have been emitted; the handler for that

@@ -88,6 +88,12 @@ export function handleDistributedReward(event: DistributedReward): void {
           getOrCreateToken(address)
         }
 
+        // Create the rewards token entity, but do not track it
+        {
+          let address = contract.rewardsToken()
+          getOrCreateToken(address)
+        }
+
         return
       }
     }
@@ -105,6 +111,12 @@ export function handleDistributedReward(event: DistributedReward): void {
       // Create the staking token entity, but do not track it
       {
         let address = contract.stakingToken()
+        getOrCreateToken(address)
+      }
+
+      // Create the rewards token entity, but do not track it
+      {
+        let address = contract.rewardsToken()
         getOrCreateToken(address)
       }
 
