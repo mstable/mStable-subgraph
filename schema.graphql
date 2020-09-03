@@ -205,9 +205,36 @@ type Account @entity {
   address: Bytes!
 
   """
+  AccountBalances of the account
+  """
+  balances: [AccountBalance!]! @derivedFrom(field: "account")
+
+  """
   CreditBalances of the account
   """
   creditBalances: [CreditBalance!]! @derivedFrom(field: "account")
+}
+
+"""
+An account balance for a given token
+"""
+type AccountBalance @entity {
+  id: ID!
+
+  """
+  Account
+  """
+  account: Account!
+
+  """
+  Amount as a decimal value
+  """
+  amount: BigDecimal!
+
+  """
+  Token
+  """
+  token: Token!
 }
 
 """
