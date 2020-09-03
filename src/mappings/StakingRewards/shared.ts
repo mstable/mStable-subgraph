@@ -68,7 +68,17 @@ function updateUserRewards(
       StakingRewardType.REWARD,
     )
     reward.amount = contract.rewards(user)
-    reward.amountPerTokenPaid = contract.userRewardPerTokenPaid(user)
+
+    let userRewardPerTokenPaid = contract.userRewardPerTokenPaid(user)
+    let rewardPerTokenStored = contract.rewardPerTokenStored()
+
+    // `userRewardPerTokenPaid` sometimes seemingly returns stale results;
+    // use whichever value is higher.
+    // (No Math.max in AssemblyScript)
+    reward.amountPerTokenPaid = userRewardPerTokenPaid.gt(rewardPerTokenStored)
+      ? userRewardPerTokenPaid
+      : rewardPerTokenStored
+
     reward.save()
   }
 

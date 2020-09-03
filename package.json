@@ -16,8 +16,8 @@
     "deploy:mainnet": "yarn graph deploy mStable/mStable-protocol --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token "
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.18.0",
-    "@graphprotocol/graph-ts": "^0.18.1",
+    "@graphprotocol/graph-cli": "https://github.com/JamesLefrere/graph-cli.git#fix-tuple-arrays-for-0.17.1",
+    "@graphprotocol/graph-ts": "^0.17.0",
     "@mstable/protocol": "^1.1.4",
     "@typescript-eslint/eslint-plugin": "^3.5.0",
     "@typescript-eslint/parser": "^3.5.0",

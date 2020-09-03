@@ -42,6 +42,24 @@ const filterAbi = (abi) => {
   }))
 }
 
+const abiHasMultidimensionalArray = (abi) => {
+  return abi.some(({ inputs = [], outputs = [] }) => {
+    const inInputs = inputs.some(
+      ({ type, internalType }) =>
+        (!type || !type.endsWith('[][]')) &&
+        (!internalType || !internalType.endsWith('[][]')),
+    )
+
+    const inOutputs = outputs.some(
+      ({ type, internalType }) =>
+        (!type || !type.endsWith('[][]')) &&
+        (!internalType || !internalType.endsWith('[][]')),
+    )
+
+    return inInputs || inOutputs
+  })
+}
+
 /**
  * Copy ABIs into one location and filter out types not handled by The Graph:
  * https://github.com/graphprotocol/graph-cli/issues/342
@@ -64,18 +82,25 @@ const main = async () => {
         }),
       )
 
-      const abis = await Promise.all(
-        jsonFiles.map((buffer) => {
-          const { contractName, abi } = JSON.parse(buffer)
+      const filteredAbis = jsonFiles.map((buffer) => {
+        const { contractName, abi } = JSON.parse(buffer)
+        if (abiHasMultidimensionalArray(abi)) {
           const filteredAbi = filterAbi(abi)
           return JSON.stringify({ contractName, abi: filteredAbi }, null, 2)
-        }),
-      )
+        }
+        return null
+      })
 
       return Promise.all(
         jsonFilePaths.map(({ name }, index) => {
-          const contents = abis[index]
-          return fs.promises.writeFile(path.join(output, name), contents)
+          const outputPath = path.join(output, name)
+
+          const filteredAbi = filteredAbis[index]
+          if (filteredAbi) {
+            return fs.promises.writeFile(outputPath, filteredAbi)
+          }
+
+          return fs.promises.copyFile(path.join(inputPath, name), outputPath)
         }),
       )
     }),

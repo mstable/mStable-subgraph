@@ -51,27 +51,6 @@ dataSources:
           handler: handleTransfer
 
   - kind: ethereum/contract
-    name: MTA
-    network: '{{network}}'
-    source:
-      abi: ERC20Detailed
-      address: '{{address_MTA}}'
-      startBlock: {{startBlock_MTA}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/mappings/Token.ts
-      entities:
-        - Token
-      abis:
-        - name: ERC20Detailed
-          file: ./abis/ERC20Detailed.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTokenTransfer
-
-  - kind: ethereum/contract
     name: SavingsManager
     network: '{{network}}'
     source:
@@ -248,6 +227,8 @@ templates:
       abis:
         - name: StakingRewards
           file: ./abis/StakingRewards.json
+        - name: StakingRewardsWithPlatformToken
+          file: ./abis/StakingRewardsWithPlatformToken.json
       eventHandlers:
         - event: RewardAdded(uint256)
           handler: handleRewardAdded
