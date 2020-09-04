@@ -13,6 +13,7 @@ export function getOrCreateAccount(accountAddress: Bytes): Account {
 
   let newAccount = new Account(accountId)
   newAccount.address = accountAddress
+  newAccount.save()
 
   return newAccount
 }

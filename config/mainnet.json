@@ -7,7 +7,7 @@
   "address_BasketManager": "0x66126B4aA2a1C07536Ef8E5e8bD4EfDA1FdEA96D",
   "startBlock_BasketManager": 10000000,
   "address_RewardsDistributor": "0x04dfDfa471b79cc9E6E8C355e6C71F8eC4916C50",
-  "startBlock_RewardsDistributor": 10585670,
+  "startBlock_RewardsDistributor": 10500000,
   "address_MerkleDrop_BAL": "0xF6E53b3aAe671319a0F9D9CA7Fac5f41599bC7a5",
   "startBlock_MerkleDrop_BAL": 10585670
 }
