@@ -90,7 +90,7 @@ const main = async () => {
         }
         return null
       })
-
+      await fs.promises.mkdir(output, { recursive: true })
       return Promise.all(
         jsonFilePaths.map(({ name }, index) => {
           const outputPath = path.join(output, name)
