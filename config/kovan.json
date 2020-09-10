@@ -1,0 +1,13 @@
+{
+  "network": "kovan",
+  "address_mUSD": "0x867d787c52d01DE9dCdfe24C658856e0E2CC518D",
+  "startBlock_mUSD": 20820000,
+  "address_SavingsManager": "0x867d787c52d01DE9dCdfe24C658856e0E2CC518D",
+  "startBlock_SavingsManager": 20820000,
+  "address_BasketManager": "0x867d787c52d01DE9dCdfe24C658856e0E2CC518D",
+  "startBlock_BasketManager": 20820000,
+  "address_RewardsDistributor": "0x867d787c52d01DE9dCdfe24C658856e0E2CC518D",
+  "startBlock_RewardsDistributor": 20820000,
+  "address_MerkleDrop_BAL": "",
+  "startBlock_MerkleDrop_BAL": 20820000
+}
