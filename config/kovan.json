@@ -8,6 +8,6 @@
   "startBlock_BasketManager": 20820000,
   "address_RewardsDistributor": "0x867d787c52d01DE9dCdfe24C658856e0E2CC518D",
   "startBlock_RewardsDistributor": 20820000,
-  "address_MerkleDrop_BAL": "",
+  "address_MerkleDrop_BAL": "0x93a222AbaA6d6f3B0779AE6E8C26EBDe4E061740",
   "startBlock_MerkleDrop_BAL": 20820000
 }
