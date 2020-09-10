@@ -28,7 +28,7 @@ Finally, run Ganache on `http://0.0.0.0:7545` such that it is available to runni
 ### Installation
 
 1. `yarn`
-2. `yarn prepare:<config>` (i.e `ropsten`, `local`, `staging`, `mainnet`)
+2. `yarn prepare:<config>` (i.e `ropsten`, `kovan`, `local`, `staging`, `mainnet`)
 3. `yarn codegen`
 
 ### Development
