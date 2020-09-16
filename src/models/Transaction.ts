@@ -61,9 +61,7 @@ export function getOrCreateFeePaidTransaction(
   transaction.type = type
   transaction.mAsset = event.address.toHex()
   let paidInBasset = Basset.load(event.params.asset.toHexString())
-  let ratioedOutputAmount = BigInt.fromI32(
-    (<i32>event.params.feeQuantity) as i32,
-  )
+  let ratioedOutputAmount = event.params.feeQuantity
     .times(paidInBasset.ratio)
     .div(RATIO)
   transaction.mAssetUnits = toDecimal(ratioedOutputAmount, 18)
