@@ -6,11 +6,13 @@
     "build": "yarn graph build",
     "prepare:local": "mustache config/development.json subgraph.template.yaml > subgraph.yaml",
     "prepare:ropsten": "mustache config/ropsten.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:kovan": "mustache config/kovan.json subgraph.template.yaml > subgraph.yaml",
     "prepare:staging": "mustache config/staging.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
     "create:local": "yarn graph create mStable/mStable-protocol --node http://127.0.0.1:8020",
     "deploy:local": "yarn graph deploy mStable/mStable-protocol --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:ropsten": "yarn graph deploy mStable/mStable-protocol-ropsten --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
+    "deploy:kovan": "yarn graph deploy mStable/mStable-protocol-kovan --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
     "deploy:staging": "yarn graph deploy mStable/mStable-protocol-staging --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
     "lint": "yarn run eslint './src/**/*.{ts,tsx}' --fix",
     "deploy:mainnet": "yarn graph deploy mStable/mStable-protocol --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token "
