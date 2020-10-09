@@ -1,12 +1,12 @@
 {
   "network": "kovan",
-  "address_mUSD": "0x752fC0b67FFB55e2261970feaC7223d8657cbF79",
+  "address_mUSD": "0x70605Bdd16e52c86FC7031446D995Cf5c7E1b0e7",
   "startBlock_mUSD": 20820000,
-  "address_SavingsManager": "0xfDccb5f945A1765796206f23fCCAa7894847c82B",
+  "address_SavingsManager": "0x00b7f2A8369c2eb5527B45b32096cC7A058aF1F6",
   "startBlock_SavingsManager": 20820000,
-  "address_BasketManager": "0xdc9B202830C65aF680D5Db3E06deA26eac989823",
+  "address_BasketManager": "0xEDfF2F3CDbf2ef0a6cA73874a0f280F1e48567F2",
   "startBlock_BasketManager": 20820000,
-  "address_RewardsDistributor": "0x1Fd01345794b162eCF3b69fFF2231B34d1994371",
+  "address_RewardsDistributor": "0x7Fc54480BAD1BbA6Ef1B34777011aC0204578BeE",
   "startBlock_RewardsDistributor": 20820000,
   "address_MerkleDrop_BAL": "0x93a222AbaA6d6f3B0779AE6E8C26EBDe4E061740",
   "startBlock_MerkleDrop_BAL": 20820000
