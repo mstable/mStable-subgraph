@@ -191,6 +191,16 @@ type Masset @entity {
   tokenSymbol: String!
 
   savingsContracts: [SavingsContract!]! @derivedFrom(field: "masset")
+
+  totalMinted: BigDecimal!
+
+  totalRedeemed: BigDecimal!
+
+  totalSwapped: BigDecimal!
+
+  totalSwapFeesPaid: BigDecimal!
+
+  totalRedemptionFeesPaid: BigDecimal!
 }
 
 """
@@ -267,6 +277,10 @@ type SavingsContract @entity {
   totalSavings: BigDecimal!
 
   totalCredits: BigDecimal!
+
+  totalDeposited: BigDecimal!
+
+  totalWithdrawn: BigDecimal!
 
   exchangeRates: [ExchangeRate!]! @derivedFrom(field: "savingsContract")
 

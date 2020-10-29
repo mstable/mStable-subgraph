@@ -1,4 +1,4 @@
-import { EthereumEvent } from '@graphprotocol/graph-ts'
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import {
   Minted,
   MintedMulti,
@@ -14,6 +14,7 @@ import { handleTokenTransfer } from './Token'
 import {
   updateMassetSwapFee,
   updateMassetRedemptionFee,
+  getOrCreateMasset,
 } from '../models/Masset'
 import { updateBassets } from '../models/Basset'
 import {
@@ -27,28 +28,28 @@ import { MASSET_DECIMALS } from '../utils/token'
 import { Basset } from '../../generated/schema'
 import { getOrCreateToken } from '../models/Token'
 
-function handleMintedEvent<TEvent extends EthereumEvent>(event: TEvent): void {
-  // A `Transfer` event should have been emitted; the handler for that
-  // event will adjust the Masset token balance and total supply.
-  // Basset token events are not tracked.
-
+function handleMint(massetAddress: Address, massetQuantity: BigInt): void {
   // Update vault balances
-  updateBassets(event.address)
+  updateBassets(massetAddress)
+
+  let masset = getOrCreateMasset(massetAddress)
+  masset.totalMinted = masset.totalMinted.plus(toDecimal(massetQuantity, 18))
+  masset.save()
 }
 
-function handleRedeemedEvent<TEvent extends EthereumEvent>(
-  event: TEvent,
-): void {
-  // A `Transfer` event should also have been emitted; the handler for that
-  // event will adjust the Masset token balance and total supply.
-  // Basset token events are not tracked.
-
+function handleRedeem(massetAddress: Address, massetQuantity: BigInt): void {
   // Update vault balances
-  updateBassets(event.address)
+  updateBassets(massetAddress)
+
+  let masset = getOrCreateMasset(massetAddress)
+  masset.totalRedeemed = masset.totalRedeemed.plus(
+    toDecimal(massetQuantity, 18),
+  )
+  masset.save()
 }
 
 export function handleMinted(event: Minted): void {
-  handleMintedEvent(event)
+  handleMint(event.address, event.params.mAssetQuantity)
 
   appendVolumeMetrics(
     TransactionType.MASSET_MINT,
@@ -58,7 +59,7 @@ export function handleMinted(event: Minted): void {
 }
 
 export function handleMintedMulti(event: MintedMulti): void {
-  handleMintedEvent(event)
+  handleMint(event.address, event.params.mAssetQuantity)
 
   appendVolumeMetrics(
     TransactionType.MASSET_MINT,
@@ -72,10 +73,43 @@ export function handleSwapped(event: Swapped): void {
   // Update vault balances
   updateBassets(event.address)
 
+  let inputBasset = Basset.load(event.params.input.toHexString())
   let outputBasset = Basset.load(event.params.output.toHexString())
   let ratioedOutputAmount = event.params.outputAmount
     .times(outputBasset.ratio)
     .div(RATIO)
+
+  let masset = getOrCreateMasset(event.address)
+
+  // For transactions calling swap directly, we can determine the fee paid
+  // by decoding the input amount and comparing it to the output amount
+  // (in masset units)
+  let data = event.transaction.input.toHexString()
+  let methodId = data.slice(0, 10)
+
+  // 0x6e81221c == swap(address,address,uint256,address)
+  if (methodId == '0x6e81221c') {
+    let inputAmountBytes = Bytes.fromHexString(
+      data
+        .slice(10) // remove methodId
+        .slice(128, 64), // 3rd field (input amount)
+    ) as Bytes
+
+    let inputAmount = BigInt.fromSignedBytes(inputAmountBytes)
+
+    let ratioedInputAmount = inputAmount.times(inputBasset.ratio).div(RATIO)
+
+    let feeAmount = ratioedOutputAmount.minus(ratioedInputAmount)
+
+    masset.totalSwapFeesPaid = masset.totalSwapFeesPaid.plus(
+      toDecimal(feeAmount, MASSET_DECIMALS),
+    )
+  }
+
+  masset.totalSwapped = masset.totalSwapped.plus(
+    toDecimal(ratioedOutputAmount, MASSET_DECIMALS),
+  )
+  masset.save()
 
   appendVolumeMetrics(
     TransactionType.MASSET_SWAP,
@@ -85,7 +119,7 @@ export function handleSwapped(event: Swapped): void {
 }
 
 export function handleRedeemed(event: Redeemed): void {
-  handleRedeemedEvent(event)
+  handleRedeem(event.address, event.params.mAssetQuantity)
 
   appendVolumeMetrics(
     TransactionType.MASSET_REDEEM,
@@ -95,7 +129,7 @@ export function handleRedeemed(event: Redeemed): void {
 }
 
 export function handleRedeemedMasset(event: RedeemedMasset): void {
-  handleRedeemedEvent(event)
+  handleRedeem(event.address, event.params.mAssetQuantity)
 
   appendVolumeMetrics(
     TransactionType.MASSET_REDEEM_MASSET,
@@ -107,6 +141,18 @@ export function handleRedeemedMasset(event: RedeemedMasset): void {
 export function handlePaidFee(event: PaidFee): void {
   getOrCreateFeePaidTransaction(event)
   // This is handled by the vault balance updating & transfer
+
+  let masset = getOrCreateMasset(event.address)
+
+  let paidInBasset = Basset.load(event.params.asset.toHexString())
+  let ratioedOutputAmount = event.params.feeQuantity
+    .times(paidInBasset.ratio)
+    .div(RATIO)
+
+  masset.totalRedemptionFeesPaid = masset.totalRedemptionFeesPaid.plus(
+    toDecimal(ratioedOutputAmount, MASSET_DECIMALS),
+  )
+  masset.save()
 }
 
 export function handleSwapFeeChanged(event: SwapFeeChanged): void {

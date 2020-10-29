@@ -66,6 +66,12 @@ export function handleSavingsDeposited(event: SavingsDeposited): void {
 
   let totalSavings = updateSavingsContractTotalSavings(event.address)
 
+  savingsContract = getOrCreateSavingsContract(event.address)
+  savingsContract.totalDeposited = savingsContract.totalDeposited.plus(
+    toDecimal(event.params.savingsDeposited, MASSET_DECIMALS),
+  )
+  savingsContract.save()
+
   appendVolumeMetrics(
     TransactionType.SAVINGS_CONTRACT_DEPOSIT,
     toDecimal(event.params.savingsDeposited, MASSET_DECIMALS),
@@ -99,6 +105,12 @@ export function handleCreditsRedeemed(event: CreditsRedeemed): void {
     event.address,
     event.params.savingsCredited,
   )
+
+  savingsContract = getOrCreateSavingsContract(event.address)
+  savingsContract.totalWithdrawn = savingsContract.totalWithdrawn.plus(
+    toDecimal(event.params.savingsCredited, MASSET_DECIMALS),
+  )
+  savingsContract.save()
 
   appendVolumeMetrics(
     TransactionType.SAVINGS_CONTRACT_WITHDRAW,

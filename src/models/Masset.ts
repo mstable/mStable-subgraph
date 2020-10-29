@@ -3,6 +3,8 @@ import { Masset } from '../../generated/schema'
 import { Masset as MassetContract } from '../../generated/MUSD/Masset'
 import { getOrCreateToken } from './Token'
 import { getOrCreateBasket } from './Basket'
+import { toDecimal, ZERO } from '../utils/number'
+import { MASSET_DECIMALS } from '../utils/token'
 
 export function upsertMasset(address: Address): Masset {
   let masset = new Masset(address.toHex())
@@ -18,6 +20,11 @@ export function upsertMasset(address: Address): Masset {
   masset.token = token.id
   masset.tokenSymbol = token.symbol
   masset.basket = basket.id
+  masset.totalMinted = toDecimal(ZERO, MASSET_DECIMALS)
+  masset.totalSwapFeesPaid = toDecimal(ZERO, MASSET_DECIMALS)
+  masset.totalSwapped = toDecimal(ZERO, MASSET_DECIMALS)
+  masset.totalRedeemed = toDecimal(ZERO, MASSET_DECIMALS)
+  masset.totalRedemptionFeesPaid = toDecimal(ZERO, MASSET_DECIMALS)
   masset.save()
 
   return masset

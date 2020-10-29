@@ -17,6 +17,8 @@ export function getOrCreateSavingsContract(address: Address): SavingsContract {
   savingsContract = new SavingsContract(id)
   savingsContract.totalCredits = toDecimal(ZERO, DECIMALS)
   savingsContract.totalSavings = toDecimal(ZERO, DECIMALS)
+  savingsContract.totalDeposited = toDecimal(ZERO, DECIMALS)
+  savingsContract.totalWithdrawn = toDecimal(ZERO, DECIMALS)
   savingsContract.savingsRate = toDecimal(ZERO, SAVINGS_RATE_DECIMALS)
   savingsContract.automationEnabled = false
 
