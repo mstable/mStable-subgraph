@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This repo has been deprecated in favour of the [mStable subgraphs monorepo](https://github.com/mstable/mStable-subgraphs-monorepo)
+
+---
+
 # mStable Subgraph
 
 A subgraph for [mStable contracts](https://github.com/mstable/mStable-contracts) on [The Graph](http://thegraph.com/).
