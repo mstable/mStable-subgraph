@@ -17,7 +17,6 @@ import {
 import { getOrCreateToken } from '../models/Token'
 import { getOrCreateStakingRewardsContract } from '../models/StakingRewardsContract'
 import { StakingRewardsContractType } from '../enums'
-import { ZERO_ADDRESS } from '../utils/token'
 
 function getOrCreateRewardsDistributor(address: Address): RewardsDistributor {
   let id = address.toHexString()
@@ -61,6 +60,20 @@ export function handleDistributedReward(event: DistributedReward): void {
   if (
     StakingRewardsContract.load(event.params.recipient.toHexString()) == null
   ) {
+    let addr = event.address.toHexString()
+    let isEarnPool: boolean =
+      addr == '0x0d4cd2c24a4c9cd31fcf0d3c4682d234d9f94be4' ||
+      addr == '0x0d4cd2c24a4c9cd31fcf0d3c4682d234d9f94be4' ||
+      addr == '0x881c72d1e6317f10a1cdcbe05040e7564e790c80' ||
+      addr == '0x9b4aba35b35eee7481775ccb4055ce4e176c9a6f' ||
+      addr == '0xe6e6e25efda5f69687aa9914f8d750c523a1d261' ||
+      addr == '0xf7575d4d4db78f6ba43c734616c51e9fd4baa7fb'
+
+    // Ignore non-Earn pools
+    if (!isEarnPool) {
+      return
+    }
+
     // Try a function that only exists on the `StakingRewardsWithPlatformToken` contract
     {
       let contract = StakingRewardsWithPlatformToken.bind(
